@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recess — Senior Accountant Live Assessment</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1a1a;
+  --muted: #6b7280;
+  --light: #f9fafb;
+  --border: #e5e7eb;
+  --brand: #6366f1;
+  --brand-light: #ede9fe;
+  --green-light: #f0fdf4;
+  --green: #16a34a;
+  --yellow-light: #fefce8;
+  --yellow: #ca8a04;
+  --red-light: #fef2f2;
+  --red: #dc2626;
+}
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: #f3f4f6;
+  color: var(--ink);
+  padding: 32px 20px;
+  min-height: 100vh;
+}
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* ─── HEADER ─────────────────────────────── */
+.doc-header {
+  background: var(--brand);
+  padding: 28px 40px;
+  color: white;
+}
+.doc-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.doc-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.doc-logo-mark {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: -apple-system, sans-serif;
+}
+.doc-logo-name {
+  font-family: -apple-system, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.doc-header-meta {
+  font-family: -apple-system, sans-serif;
+  font-size: 12px;
+  opacity: 0.75;
+  text-align: right;
+}
+.doc-title {
+  font-family: -apple-system, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+.doc-subtitle {
+  font-family: -apple-system, sans-serif;
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+.doc-candidate-bar {
+  display: flex;
+  gap: 32px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: -apple-system, sans-serif;
+  font-size: 13px;
+}
+.candidate-field-pair {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.candidate-field-pair label {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.candidate-field-pair input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  color: white;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  flex: 1;
+  padding: 2px 4px;
+}
+.candidate-field-pair input::placeholder { color: rgba(255,255,255,0.4); }
+.candidate-field-pair input:focus { border-bottom-color: white; }
+
+/* ─── INSTRUCTIONS BAR ───────────────────── */
+.instructions-bar {
+  background: var(--brand-light);
+  border-bottom: 2px solid var(--brand);
+  padding: 12px 40px;
+  display: flex;
+  gap: 24px;
+  font-family: -apple-system, sans-serif;
+  font-size: 12px;
+  color: #4338ca;
+}
+.instr-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── SECTIONS ───────────────────────────── */
+.section-wrapper {
+  padding: 32px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.section-wrapper:last-child { border-bottom: none; }
+
+/* Section header */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.section-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.section-title-block { }
+.section-title {
+  font-family: -apple-system, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.section-meta {
+  font-family: -apple-system, sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+.section-badge {
+  margin-left: auto;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* Scenario box */
+.scenario-box {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brand);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.scenario-box strong {
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Tasks list */
+.tasks-intro {
+  font-family: -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── INBOX TABLE ────────────────────────── */
+.inbox-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.inbox-table th {
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: left;
+}
+.inbox-table td {
+  border: 1px solid var(--border);
+  padding: 9px 10px;
+  vertical-align: top;
+}
+.inbox-table td:nth-child(1) {
+  width: 28px;
+  text-align: center;
+  font-family: -apple-system, sans-serif;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--light);
+}
+.inbox-table td:nth-child(2) { min-width: 200px; }
+.inbox-table td:nth-child(3) { width: 60px; background: white; }
+.inbox-table td:nth-child(4) { width: 70px; background: white; }
+.inbox-source {
+  font-family: -apple-system, sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.inbox-msg { line-height: 1.4; font-size: 13px; }
+.write-cell {
+  outline: none;
+  min-height: 28px;
+  display: block;
+  width: 100%;
+  font-family: -apple-system, sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+}
+.write-cell:empty::before {
+  content: attr(data-placeholder);
+  color: #d1d5db;
+  font-style: italic;
+}
+.write-cell:focus { background: rgba(99,102,241,0.04); }
+
+/* Top 3 reasoning */
+.reasoning-area {
+  margin-top: 8px;
+}
+.reasoning-label {
+  font-family: -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.reasoning-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 80px;
+  font-size: 14px;
+  line-height: 1.7;
+  outline: none;
+  color: var(--ink);
+  font-family: Georgia, serif;
+}
+.reasoning-box:empty::before {
+  content: "Explain your reasoning for your top 3 priorities…";
+  color: #d1d5db;
+  font-style: italic;
+}
+.reasoning-box:focus { border-color: var(--brand); }
+
+/* ─── TRIAL BALANCE ──────────────────────── */
+.tb-section-title {
+  font-family: -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 18px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--brand-light);
+}
+.tb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 8px;
+}
+.tb-table th {
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  font-family: -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.tb-table th:not(:first-child) { text-align: right; }
+.tb-table td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+}
+.tb-table td:not(:first-child) { text-align: right; }
+.tb-table .group-row td {
+  background: var(--brand-light);
+  font-family: -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand);
+}
+.tb-table tfoot td {
+  border-top: 2px solid var(--ink);
+  font-weight: 700;
+  background: var(--light);
+}
+.tb-note {
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Supporting docs */
+.support-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.support-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  background: var(--light);
+}
+.support-card-title {
+  font-family: -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* Errors table */
+.errors-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.errors-table th {
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-align: left;
+}
+.errors-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  vertical-align: top;
+}
+.errors-table td:nth-child(1) {
+  width: 28px;
+  text-align: center;
+  font-family: -apple-system, sans-serif;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--light);
+}
+.errors-table td:nth-child(2) { width: 55%; }
+.errors-table td:nth-child(3) { width: 40%; }
+.error-write {
+  outline: none;
+  min-height: 48px;
+  display: block;
+  width: 100%;
+  font-family: Georgia, serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.error-write:empty::before {
+  content: attr(data-placeholder);
+  color: #d1d5db;
+  font-style: italic;
+  font-size: 12px;
+}
+.error-write:focus { background: rgba(99,102,241,0.03); }
+
+/* ─── AI FLUENCY ─────────────────────────── */
+.prompt-container {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.prompt-header {
+  background: var(--light);
+  padding: 8px 14px;
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.prompt-write {
+  padding: 14px;
+  min-height: 100px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  outline: none;
+  color: var(--ink);
+}
+.prompt-write:empty::before {
+  content: "Write your AI prompt here…";
+  color: #d1d5db;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+.prompt-write:focus { background: rgba(99,102,241,0.03); }
+
+.verify-write {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  min-height: 80px;
+  font-size: 14px;
+  line-height: 1.7;
+  outline: none;
+  color: var(--ink);
+  font-family: Georgia, serif;
+  margin-bottom: 16px;
+}
+.verify-write:empty::before {
+  content: "What would you verify before sending the AI's output to the CFO?";
+  color: #d1d5db;
+  font-style: italic;
+}
+.verify-write:focus { border-color: var(--brand); }
+
+/* Question labels */
+.q-label {
+  font-family: -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.q-label .q-letter {
+  width: 22px;
+  height: 22px;
+  background: var(--brand-light);
+  color: var(--brand);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── FOOTER ─────────────────────────────── */
+.doc-footer {
+  background: var(--light);
+  border-top: 1px solid var(--border);
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ─── PRINT ──────────────────────────────── */
+@media print {
+  body { background: white; padding: 0; }
+  .page { box-shadow: none; border-radius: 0; }
+  .no-print { display: none; }
+}
+
+/* ─── RESPONSIVE ─────────────────────────── */
+@media (max-width: 600px) {
+  .section-wrapper { padding: 24px 20px; }
+  .doc-header { padding: 20px; }
+  .doc-candidate-bar { flex-direction: column; gap: 12px; }
+  .support-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="doc-header">
+    <div class="doc-header-top">
+      <div class="doc-logo">
+        <div class="doc-logo-mark">R</div>
+        <div class="doc-logo-name">Recess</div>
+      </div>
+      <div class="doc-header-meta">
+        Senior Accountant Hiring Assessment<br>
+        Confidential — Please do not share
+      </div>
+    </div>
+    <div class="doc-title">Live Practical Assessment</div>
+    <div class="doc-subtitle">Work through the sections below. Type your answers directly in this document.</div>
+    <div class="doc-candidate-bar">
+      <div class="candidate-field-pair">
+        <label>Candidate Name:</label>
+        <input type="text" id="c-name" placeholder="Your name" />
+      </div>
+      <div class="candidate-field-pair">
+        <label>Date:</label>
+        <input type="text" id="c-date" placeholder="Today's date" />
+      </div>
+      <div class="candidate-field-pair">
+        <label>Interviewer:</label>
+        <input type="text" id="c-interviewer" placeholder="Interviewer name" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ INSTRUCTIONS BAR ═══ -->
+  <div class="instructions-bar">
+    <div class="instr-item">📋 <strong>25 minutes total</strong></div>
+    <div class="instr-item">🛠 <strong>Use any tools you'd normally use</strong> — calculator, AI, reference materials</div>
+    <div class="instr-item">⌨️ <strong>Type your answers directly below each question</strong></div>
+    <div class="instr-item">🎯 <strong>No trick questions</strong> — we want to see how you think</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION 1: INBOX TRIAGE
+  ════════════════════════════════════════════ -->
+  <div class="section-wrapper">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title-block">
+        <div class="section-title">Monday Morning Inbox</div>
+        <div class="section-meta">Organization &amp; Prioritization &bull; 7 minutes</div>
+      </div>
+      <div class="section-badge">⏱ 7 min</div>
+    </div>
+
+    <div class="scenario-box">
+      <strong>Scenario</strong>
+      You're the Senior Accountant at Recess. You just returned from 4 days of PTO. It's Monday morning, 9 AM.
+      <strong>Month-end close is due Wednesday EOD.</strong> Below are 12 items waiting for your attention.
+    </div>
+
+    <div class="tasks-intro">Your Tasks:</div>
+    <p style="font-family:-apple-system,sans-serif;font-size:13px;margin-bottom:12px;line-height:1.6">
+      <strong>(A)</strong> Rank each item 1–12 (1 = most urgent) &nbsp;&bull;&nbsp;
+      <strong>(B)</strong> Mark: <strong>H</strong> = Handle myself &nbsp;|&nbsp; <strong>D</strong> = Delegate &nbsp;|&nbsp; <strong>W</strong> = Can wait &nbsp;&bull;&nbsp;
+      <strong>(C)</strong> Explain your reasoning for your <strong>top 3</strong> priorities below the table
+    </p>
+
+    <table class="inbox-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Item</th>
+          <th>Rank (1–12)</th>
+          <th>H / D / W</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <div class="inbox-source">📧 Email — CEO</div>
+            <div class="inbox-msg">Board meeting moved to Thursday. Need preliminary financials by Wednesday EOD.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            <div class="inbox-source">💬 Slack — AP Clerk</div>
+            <div class="inbox-msg">Two vendor invoices totaling $47K are missing approvals. Vendors are calling.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>
+            <div class="inbox-source">🔔 System Notification</div>
+            <div class="inbox-msg">Bank feed in QBO stopped syncing Friday. 3 days of transactions not imported.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>
+            <div class="inbox-source">📧 Email — External Auditors</div>
+            <div class="inbox-msg">Please send us the Q4 depreciation schedule by end of week.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>
+            <div class="inbox-source">✅ Asana Task — Overdue</div>
+            <div class="inbox-msg">Reconcile petty cash ($500 balance) — due last Friday.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>
+            <div class="inbox-source">💬 Slack — Sales VP</div>
+            <div class="inbox-msg">Can you explain why my department's travel budget shows 200% spent? The CEO is asking.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>
+            <div class="inbox-source">📧 Email — HR</div>
+            <div class="inbox-msg">New hire starts Wednesday. Need payroll setup and QBO access before then.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>
+            <div class="inbox-source">📞 Voicemail — Insurance Broker</div>
+            <div class="inbox-msg">Annual renewal paperwork due by Friday. $24K premium.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>
+            <div class="inbox-source">📅 Calendar</div>
+            <div class="inbox-msg">Monthly 1:1 with CFO — today at 2 PM.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>
+            <div class="inbox-source">📧 Email — Tax Advisor</div>
+            <div class="inbox-msg">Extension filing deadline April 15. Need your review of the draft by next Monday.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>
+            <div class="inbox-source">✅ Asana Notification</div>
+            <div class="inbox-msg">Three team members haven't logged hours for last week.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>
+            <div class="inbox-source">💬 Slack — Staff Accountant</div>
+            <div class="inbox-msg">I found a $12K discrepancy in the January bank reconciliation — not sure what to do.</div>
+          </td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="—"></div></td>
+          <td><div class="write-cell" contenteditable="true" data-placeholder="H/D/W"></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="reasoning-area">
+      <div class="reasoning-label">(C) Explain your reasoning for your top 3 priorities:</div>
+      <div class="reasoning-box" contenteditable="true"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION 2: CLOSE PACKAGE
+  ════════════════════════════════════════════ -->
+  <div class="section-wrapper">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title-block">
+        <div class="section-title">Month-End Close — Error Detection</div>
+        <div class="section-meta">Technical Accounting &bull; 13 minutes &bull; Most Important Section</div>
+      </div>
+      <div class="section-badge">⏱ 13 min</div>
+    </div>
+
+    <div class="scenario-box">
+      <strong>Scenario</strong>
+      Below is a simplified month-end close package for <strong>Greenfield Services LLC</strong> for January 2026 (accrual basis).
+      It includes a trial balance and supporting documents. <strong>Several errors are embedded in these materials.</strong>
+      For each error you find: identify it, explain why it's a problem, and write the correcting journal entry (DR/CR).
+      <br><br>
+      <em>Note: One piece of information in the supporting documents is intentionally correct — confirm its accuracy.</em>
+    </div>
+
+    <!-- Trial Balance -->
+    <div class="tb-section-title">Trial Balance — Greenfield Services LLC — January 31, 2026</div>
+    <table class="tb-table">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Prior Month (Dec)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="group-row"><td colspan="4">Assets</td></tr>
+        <tr>
+          <td>Cash — Operating</td>
+          <td>$84,320</td><td>—</td><td>$91,600</td>
+        </tr>
+        <tr>
+          <td>Accounts Receivable</td>
+          <td>$127,500</td><td>—</td><td>$118,200</td>
+        </tr>
+        <tr>
+          <td>Prepaid Insurance</td>
+          <td>$18,000</td><td>—</td><td>$0</td>
+        </tr>
+        <tr>
+          <td>Fixed Assets — Equipment</td>
+          <td>$145,000</td><td>—</td><td>$138,800</td>
+        </tr>
+        <tr>
+          <td>Accumulated Depreciation</td>
+          <td>—</td><td>$29,000</td><td>$29,000</td>
+        </tr>
+        <tr class="group-row"><td colspan="4">Liabilities</td></tr>
+        <tr>
+          <td>Accounts Payable</td>
+          <td>—</td><td>$43,200</td><td>$38,900</td>
+        </tr>
+        <tr>
+          <td>Accrued Liabilities</td>
+          <td>—</td><td>$8,500</td><td>$8,500</td>
+        </tr>
+        <tr>
+          <td>Deferred Revenue</td>
+          <td>—</td><td>$18,000</td><td>$0</td>
+        </tr>
+        <tr class="group-row"><td colspan="4">Revenue</td></tr>
+        <tr>
+          <td>Revenue — Consulting</td>
+          <td>—</td><td>$212,000</td><td>$198,400</td>
+        </tr>
+        <tr class="group-row"><td colspan="4">Expenses</td></tr>
+        <tr>
+          <td>Cost of Services</td>
+          <td>$98,400</td><td>—</td><td>$95,100</td>
+        </tr>
+        <tr>
+          <td>Rent Expense</td>
+          <td>$12,000</td><td>—</td><td>$12,000</td>
+        </tr>
+        <tr>
+          <td>Office Supplies</td>
+          <td>$9,200</td><td>—</td><td>$1,840</td>
+        </tr>
+        <tr>
+          <td>Utilities Expense</td>
+          <td>$0</td><td>—</td><td>$1,840</td>
+        </tr>
+        <tr>
+          <td>Depreciation Expense</td>
+          <td>$0</td><td>—</td><td>$1,208</td>
+        </tr>
+        <tr>
+          <td>Marketing Expense</td>
+          <td>$31,500</td><td>—</td><td>$10,200</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="tb-note">* Prior month (Dec) column provided for reference. Company is on accrual basis.</p>
+
+    <!-- Supporting Docs -->
+    <div class="tb-section-title" style="margin-top:20px">Supporting Information</div>
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-card-title">🏦 Bank Reconciliation — Jan 31, 2026</div>
+        Bank statement ending balance: <strong>$86,120</strong><br>
+        Outstanding check #4821: ($2,400)<br>
+        Deposit in transit (Jan 31): +$600<br>
+        <br>
+        Books balance (per trial balance): $84,320
+      </div>
+      <div class="support-card">
+        <div class="support-card-title">📄 AP Inbox Note</div>
+        Invoice from Pacific Electric received Jan 28 for January utility service: <strong>$2,100</strong>. Not yet entered in QBO. Payment terms: Net 30.
+      </div>
+      <div class="support-card">
+        <div class="support-card-title">📋 Insurance Policy Note</div>
+        Annual commercial insurance premium: <strong>$18,000</strong> paid January 1, 2026. Policy covers January 1 – December 31, 2026.
+      </div>
+      <div class="support-card">
+        <div class="support-card-title">🖥 Fixed Assets</div>
+        Equipment purchased 2024. Annual straight-line depreciation: <strong>$14,500/year</strong>. Last depreciation entry recorded: December 31, 2025.<br><br>
+        Note: MacBook Pro purchased Jan 15, 2026 for <strong>$6,200</strong> — coded to Office Supplies.
+      </div>
+      <div class="support-card">
+        <div class="support-card-title">📑 Contract Note — Deferred Revenue</div>
+        Client (Hargrove Corp.) signed 6-month consulting agreement Jan 1, 2026 and prepaid the full amount: <strong>$18,000</strong>. Work commences January 1 and runs through June 30.
+      </div>
+      <div class="support-card">
+        <div class="support-card-title">📊 Marketing Expense Detail</div>
+        January marketing includes: annual trade show booth ($18,000 deposit), digital ad spend ($8,400), and agency retainer ($5,100). <br>December marketing: $10,200.
+      </div>
+    </div>
+
+    <!-- Errors table -->
+    <div class="tb-section-title">Your Findings — List Errors &amp; Adjusting Entries</div>
+    <table class="errors-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Error / Issue (describe the problem &amp; why it matters)</th>
+          <th>Correcting Journal Entry (DR / CR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="Describe the error and its impact…"></div></td>
+          <td><div class="error-write" contenteditable="true" data-placeholder="DR ___________&#10;CR ___________"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-family:-apple-system,sans-serif;font-size:11px;color:var(--muted);margin-top:4px">
+      Add rows as needed. There may be more than 6 issues — or fewer. List everything you find.
+    </p>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION 3: AI FLUENCY
+  ════════════════════════════════════════════ -->
+  <div class="section-wrapper">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title-block">
+        <div class="section-title">AI Fluency</div>
+        <div class="section-meta">Prompt Writing + Discussion &bull; 5 minutes</div>
+      </div>
+      <div class="section-badge">⏱ 5 min</div>
+    </div>
+
+    <div class="scenario-box">
+      <strong>Scenario</strong>
+      Based on the close package above, marketing expense jumped from <strong>$10,200 in December</strong> to
+      <strong>$31,500 in January</strong> — a <strong>209% increase</strong>. The CFO wants a brief written explanation
+      to include in the board materials.
+    </div>
+
+    <div class="q-label">
+      <div class="q-letter">A</div>
+      Write the AI prompt you would use to draft a variance analysis narrative for this marketing expense spike:
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header">🤖 Your AI Prompt</div>
+      <div class="prompt-write" contenteditable="true"></div>
+    </div>
+
+    <div class="q-label">
+      <div class="q-letter">B</div>
+      Before sending the AI's output to the CFO, what would you verify or check?
+    </div>
+    <div class="verify-write" contenteditable="true"></div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="doc-footer">
+    <div>Recess — Senior Accountant Live Assessment &bull; Confidential</div>
+    <div>25 minutes total &bull; 3 sections</div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// Auto-fill today's date
+const today = new Date();
+const dateStr = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+document.getElementById('c-date').placeholder = dateStr;
+
+// Restore focus styling on contenteditable cells
+document.querySelectorAll('[contenteditable]').forEach(el => {
+  el.addEventListener('focus', () => el.style.outline = 'none');
+});
+</script>
+</body>
+</html>
