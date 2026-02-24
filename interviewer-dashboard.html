@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recess — Senior Accountant Live Test | Interviewer Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0d1117;
+  --sidebar-bg: #161b22;
+  --panel: #1c2128;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --orange: #f0883e;
+  --brand: #6366f1;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--text);
+  height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+header {
+  background: var(--sidebar-bg); border-bottom: 1px solid var(--border);
+  padding: 10px 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-logo {
+  width: 30px; height: 30px; background: var(--brand); border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: white; letter-spacing: -0.5px;
+}
+.brand-text { font-size: 14px; font-weight: 600; }
+.brand-sep { color: var(--border); font-size: 18px; margin: 0 2px; }
+.header-title { font-size: 13px; color: var(--muted); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.candidate-field { display: flex; align-items: center; gap: 8px; }
+.candidate-field label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.candidate-field input {
+  background: var(--panel); border: 1px solid var(--border); color: var(--text);
+  padding: 5px 10px; border-radius: 6px; font-size: 13px; width: 180px;
+  outline: none;
+}
+.candidate-field input:focus { border-color: var(--brand); }
+.total-clock {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 5px 12px; border-radius: 6px; font-size: 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.total-clock-icon { color: var(--muted); }
+.total-clock-time { font-family: 'SF Mono', 'Courier New', monospace; font-weight: 600; color: var(--blue); }
+.total-clock-label { font-size: 11px; color: var(--muted); }
+
+/* ─── LAYOUT ─────────────────────────────────────────── */
+.app-body { display: flex; flex: 1; overflow: hidden; }
+
+/* ─── SIDEBAR ────────────────────────────────────────── */
+.sidebar {
+  width: 210px; background: var(--sidebar-bg); border-right: 1px solid var(--border);
+  padding: 12px 10px; display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
+}
+.sidebar-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted); padding: 8px 10px 4px;
+}
+.sec-nav-btn {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+  border-radius: 8px; cursor: pointer; border: none; background: transparent;
+  color: var(--text); text-align: left; width: 100%; transition: all 0.15s;
+}
+.sec-nav-btn:hover { background: rgba(255,255,255,0.05); }
+.sec-nav-btn.active {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.35);
+}
+.sec-nav-btn.done .sec-circle { background: var(--green); color: #0d1117; }
+.sec-circle {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--panel);
+  font-size: 11px; font-weight: 700; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; border: 1px solid var(--border);
+}
+.sec-nav-info { }
+.sec-nav-name { font-size: 12px; font-weight: 500; }
+.sec-nav-meta { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+.sidebar-tip {
+  background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 8px; padding: 10px; font-size: 11px; color: var(--muted);
+  line-height: 1.5; margin-top: auto;
+}
+.sidebar-tip strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+/* ─── MAIN CONTENT ───────────────────────────────────── */
+.main-content {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; gap: 16px; min-width: 0;
+}
+.section-area { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.section-view { display: none; flex-direction: column; gap: 12px; }
+.section-view.active { display: flex; }
+
+/* ─── TIMER CARD ─────────────────────────────────────── */
+.timer-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 22px; display: flex; align-items: center; gap: 20px;
+}
+.timer-big {
+  font-size: 56px; font-family: 'SF Mono', 'Courier New', monospace;
+  font-weight: 700; letter-spacing: -2px; min-width: 160px; text-align: center;
+  transition: color 0.3s;
+}
+.timer-big.warn { color: var(--yellow); }
+.timer-big.urgent { color: var(--red); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0.4; } }
+.timer-meta { flex: 1; }
+.timer-sec-name { font-size: 18px; font-weight: 600; margin-bottom: 3px; }
+.timer-sec-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.timer-controls { display: flex; gap: 8px; }
+.timer-progress { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.timer-progress-fill { height: 100%; background: var(--brand); transition: width 1s linear; border-radius: 2px; }
+.btn {
+  padding: 7px 14px; border-radius: 7px; border: none; cursor: pointer;
+  font-size: 12px; font-weight: 600; transition: all 0.15s; white-space: nowrap;
+}
+.btn-start { background: var(--green); color: #0d1117; }
+.btn-start:hover { opacity: 0.85; }
+.btn-pause { background: var(--yellow); color: #0d1117; display: none; }
+.btn-pause:hover { opacity: 0.85; }
+.btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-reset:hover { color: var(--text); border-color: var(--text); }
+.btn-next { background: var(--brand); color: white; }
+.btn-next:hover { opacity: 0.85; }
+.section-done-badge {
+  background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.3);
+  color: var(--green); padding: 4px 10px; border-radius: 5px; font-size: 11px;
+  font-weight: 600; display: none; align-items: center; gap: 5px;
+}
+
+/* ─── ACCORDION CARD ─────────────────────────────────── */
+.acc-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden;
+}
+.acc-header {
+  padding: 12px 18px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; user-select: none; transition: background 0.15s;
+}
+.acc-header:hover { background: rgba(255,255,255,0.03); }
+.acc-icon { font-size: 15px; flex-shrink: 0; }
+.acc-title { font-size: 13px; font-weight: 600; flex: 1; }
+.acc-badge {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.badge-blue { background: rgba(88,166,255,0.15); color: var(--blue); }
+.badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+.acc-chevron { color: var(--muted); font-size: 11px; transition: transform 0.2s; }
+.acc-chevron.open { transform: rotate(180deg); }
+.acc-body {
+  display: none; padding: 16px 18px;
+  border-top: 1px solid var(--border);
+}
+.acc-body.open { display: block; }
+
+/* ─── SCRIPT BOX ─────────────────────────────────────── */
+.script-box {
+  background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.75;
+  font-style: italic;
+}
+.script-box em { font-style: normal; color: var(--blue); font-weight: 500; }
+.script-instr {
+  background: rgba(63,185,80,0.07); border: 1px solid rgba(63,185,80,0.2);
+  border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--green);
+  margin-top: 10px; display: flex; gap: 8px;
+}
+
+/* ─── OBSERVE LIST ───────────────────────────────────── */
+.observe-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.observe-list li {
+  display: flex; gap: 10px; font-size: 13px; line-height: 1.5;
+  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.observe-list li:last-child { border-bottom: none; }
+.obs-icon { flex-shrink: 0; }
+.flag-box {
+  background: rgba(210,153,34,0.1); border-left: 3px solid var(--yellow);
+  border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 12px;
+  margin-top: 10px; line-height: 1.5;
+}
+.flag-box strong { color: var(--yellow); }
+
+/* ─── INBOX TABLE ────────────────────────────────────── */
+.inbox-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.inbox-table th {
+  background: rgba(255,255,255,0.04); padding: 7px 10px; text-align: left;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);
+}
+.inbox-table td { padding: 8px 10px; border-top: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+.inbox-table tr.p-critical td { background: rgba(248,81,73,0.06); }
+.inbox-table tr.p-high td { background: rgba(210,153,34,0.04); }
+.inbox-item-source { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.inbox-item-msg { font-size: 12px; line-height: 1.4; }
+.priority-tag {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+}
+.pt-critical { background: rgba(248,81,73,0.15); color: var(--red); }
+.pt-high { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.pt-med { background: rgba(88,166,255,0.15); color: var(--blue); }
+.pt-low { background: rgba(139,148,158,0.15); color: var(--muted); }
+.delegate-tag { font-size: 10px; color: var(--purple); }
+
+/* ─── TRIAL BALANCE ──────────────────────────────────── */
+.tb-container { overflow-x: auto; }
+.tb-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'SF Mono', monospace; }
+.tb-table th {
+  background: rgba(255,255,255,0.05); padding: 7px 12px;
+  font-size: 10px; text-transform: uppercase; color: var(--muted);
+}
+.tb-table th:not(:first-child) { text-align: right; }
+.tb-table td { padding: 7px 12px; border-top: 1px solid rgba(255,255,255,0.05); }
+.tb-table td:not(:first-child) { text-align: right; }
+.tb-table .section-row td { background: rgba(99,102,241,0.1); font-size: 10px; text-transform: uppercase; color: var(--purple); letter-spacing: 0.05em; font-weight: 600; font-family: -apple-system, sans-serif; }
+.tb-table .error-row td { background: rgba(248,81,73,0.06); }
+.tb-table .ok-row td { background: rgba(63,185,80,0.05); }
+.tb-table tfoot td { border-top: 2px solid var(--border); font-weight: 600; }
+.error-indicator { color: var(--red); font-size: 10px; margin-left: 4px; }
+.supporting-docs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.doc-card {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: 6px; padding: 10px; font-size: 11px; line-height: 1.5;
+}
+.doc-card-title { font-size: 10px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.doc-has-error { border-left: 3px solid var(--red) !important; }
+.doc-is-ok { border-left: 3px solid var(--green) !important; }
+
+/* ─── ANSWER KEY ─────────────────────────────────────── */
+.ak-locked { text-align: center; padding: 20px; }
+.ak-locked p { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+.btn-reveal { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+.btn-reveal:hover { background: rgba(210,153,34,0.25); }
+.ak-content { display: none; }
+.ak-content.revealed { display: block; }
+.ak-item {
+  border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden;
+}
+.ak-item-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: rgba(255,255,255,0.03);
+}
+.ak-num {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--brand);
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ak-error-name { font-size: 13px; font-weight: 600; flex: 1; }
+.ak-item-body { padding: 10px 14px; font-size: 12px; line-height: 1.6; }
+.ak-je {
+  font-family: 'SF Mono', monospace; font-size: 11px;
+  background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.2);
+  border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+  color: var(--green);
+}
+.ak-why { color: var(--muted); margin-bottom: 4px; }
+.ak-note {
+  background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.2);
+  border-radius: 6px; padding: 8px 12px; font-size: 12px; color: var(--blue);
+  margin-top: 8px;
+}
+.errors-found-counter {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.errors-btns { display: flex; gap: 4px; }
+.error-count-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); cursor: pointer; font-size: 12px;
+  font-weight: 600; transition: all 0.15s;
+}
+.error-count-btn.active { background: var(--brand); color: white; border-color: var(--brand); }
+.errors-label { font-size: 12px; color: var(--muted); }
+
+/* ─── AI FLUENCY ─────────────────────────────────────── */
+.discussion-qs { display: flex; flex-direction: column; gap: 8px; }
+.dq {
+  background: rgba(188,140,255,0.07); border: 1px solid rgba(188,140,255,0.2);
+  border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5;
+}
+.dq::before { content: '💬 '; }
+.ai-signals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.signal-box { border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.5; }
+.signal-strong { background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.2); }
+.signal-weak { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.2); }
+.signal-title { font-weight: 600; margin-bottom: 6px; }
+.signal-strong .signal-title { color: var(--green); }
+.signal-weak .signal-title { color: var(--red); }
+.signal-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.signal-list li::before { content: '• '; color: var(--muted); }
+
+/* ─── SCORE PANEL ────────────────────────────────────── */
+.score-panel {
+  width: 270px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;
+}
+.score-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px;
+}
+.score-card-title {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); margin-bottom: 14px;
+}
+.score-row { margin-bottom: 14px; }
+.score-row-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.score-row-name { font-size: 12px; font-weight: 500; }
+.score-row-weight { font-size: 10px; color: var(--muted); }
+.score-btns { display: flex; gap: 4px; }
+.sc-btn {
+  flex: 1; padding: 6px 0; border-radius: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 13px; font-weight: 700; transition: all 0.15s;
+}
+.sc-btn:hover { border-color: var(--text); color: var(--text); }
+.sc-btn.s1 { }
+.sc-btn.s2 { }
+.sc-btn.s3 { }
+.sc-btn.s4 { }
+.sc-btn.sel-1 { background: rgba(248,81,73,0.2); color: var(--red); border-color: var(--red); }
+.sc-btn.sel-2 { background: rgba(210,153,34,0.2); color: var(--yellow); border-color: var(--yellow); }
+.sc-btn.sel-3 { background: rgba(88,166,255,0.2); color: var(--blue); border-color: var(--blue); }
+.sc-btn.sel-4 { background: rgba(63,185,80,0.2); color: var(--green); border-color: var(--green); }
+.score-row-rubric { font-size: 10px; color: var(--muted); margin-top: 4px; min-height: 14px; padding: 2px 0; }
+
+/* ─── TOTAL SCORE ────────────────────────────────────── */
+.total-score-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; text-align: center;
+}
+.total-score-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+.total-score-num {
+  font-size: 52px; font-weight: 800; font-family: monospace; line-height: 1;
+  margin-bottom: 4px;
+}
+.total-score-max { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.decision-badge {
+  display: inline-block; padding: 6px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 700; margin-bottom: 8px;
+}
+.d-strong { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+.d-hire { background: rgba(88,166,255,0.15); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+.d-border { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+.d-nohire { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+.d-pending { background: rgba(139,148,158,0.12); color: var(--muted); border: 1px solid rgba(139,148,158,0.2); }
+.decision-sub { font-size: 11px; color: var(--muted); }
+.critical-flag {
+  background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.3);
+  border-radius: 6px; padding: 8px 10px; font-size: 11px; color: var(--red);
+  margin-top: 8px; display: none;
+}
+
+/* ─── NOTES CARD ─────────────────────────────────────── */
+.notes-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; flex: 1; display: flex; flex-direction: column;
+}
+.notes-card h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+.notes-card textarea {
+  flex: 1; width: 100%; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 8px 10px; border-radius: 6px; font-size: 11px;
+  resize: none; font-family: inherit; line-height: 1.6; min-height: 100px; outline: none;
+}
+.notes-card textarea:focus { border-color: var(--brand); }
+.notes-card textarea::placeholder { color: var(--muted); }
+
+/* ─── TOAST ──────────────────────────────────────────── */
+#toast {
+  position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+  background: var(--yellow); color: #0d1117; padding: 10px 20px; border-radius: 8px;
+  font-weight: 700; font-size: 14px; z-index: 999; display: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* ─── SECTION TRANSITION MSG ─────────────────────────── */
+.section-complete-banner {
+  background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.25);
+  border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--green);
+  display: flex; align-items: center; gap: 10px; margin-top: 4px;
+}
+
+/* ─── NEW CANDIDATE MODAL ────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 500; display: none;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  width: 480px; max-width: 90vw; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.modal-header {
+  padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.modal-header h3 { font-size: 15px; font-weight: 700; flex: 1; }
+.modal-body { padding: 20px 22px; }
+.summary-candidate-name {
+  font-size: 20px; font-weight: 700; margin-bottom: 4px;
+}
+.summary-timestamp { font-size: 11px; color: var(--muted); margin-bottom: 18px; }
+.summary-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.summary-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: 13px;
+}
+.summary-row-name { color: var(--muted); }
+.summary-row-score { font-weight: 700; font-family: monospace; font-size: 14px; }
+.sr-1 { color: var(--red); }
+.sr-2 { color: var(--yellow); }
+.sr-3 { color: var(--blue); }
+.sr-4 { color: var(--green); }
+.sr-none { color: var(--muted); }
+.summary-total-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+.summary-total-label { font-size: 13px; font-weight: 600; }
+.summary-total-score { font-size: 28px; font-weight: 800; font-family: monospace; }
+.summary-notes-preview {
+  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+  font-size: 12px; color: var(--muted); line-height: 1.5; max-height: 70px;
+  overflow: hidden; border: 1px solid var(--border); margin-bottom: 16px;
+}
+.summary-notes-preview.empty { font-style: italic; }
+.modal-actions { display: flex; gap: 8px; }
+.btn-screenshot {
+  background: rgba(88,166,255,0.15); color: var(--blue);
+  border: 1px solid rgba(88,166,255,0.3); flex: 1;
+}
+.btn-screenshot:hover { background: rgba(88,166,255,0.25); }
+.btn-confirm-reset {
+  background: var(--green); color: #0d1117; flex: 1;
+}
+.btn-confirm-reset:hover { opacity: 0.85; }
+.btn-cancel-modal {
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-cancel-modal:hover { color: var(--text); }
+.modal-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* ─── NEW CANDIDATE BUTTON ───────────────────────────── */
+.btn-new-candidate {
+  background: rgba(63,185,80,0.12); color: var(--green);
+  border: 1px solid rgba(63,185,80,0.3); padding: 5px 12px;
+  border-radius: 6px; font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: all 0.15s;
+}
+.btn-new-candidate:hover { background: rgba(63,185,80,0.22); }
+
+/* ─── CANDIDATES VIEW ────────────────────────────────── */
+.candidates-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.candidates-toolbar h2 { font-size: 16px; font-weight: 700; }
+.candidates-stats {
+  display: flex; gap: 12px; margin-bottom: 16px;
+}
+.cstat {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 18px; flex: 1; text-align: center;
+}
+.cstat-num { font-size: 26px; font-weight: 800; font-family: monospace; }
+.cstat-label { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+.candidates-empty {
+  text-align: center; padding: 48px 20px; color: var(--muted);
+  background: var(--panel); border: 1px dashed var(--border); border-radius: 12px;
+  font-size: 13px; line-height: 1.7;
+}
+.candidates-empty .empty-icon { font-size: 36px; display: block; margin-bottom: 12px; }
+.candidates-table-wrap { overflow-x: auto; }
+.candidates-table {
+  width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px;
+}
+.candidates-table th {
+  background: var(--panel); border-bottom: 2px solid var(--border);
+  padding: 10px 12px; text-align: left; font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--muted); white-space: nowrap;
+}
+.candidates-table th.col-score { text-align: center; }
+.candidates-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: middle;
+}
+.candidates-table tr:hover td { background: rgba(255,255,255,0.02); }
+.candidates-table tr.best-overall td { background: rgba(63,185,80,0.05); }
+.cand-name { font-weight: 600; font-size: 13px; }
+.cand-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.score-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 6px; font-weight: 700;
+  font-size: 13px; margin: auto;
+}
+.sp-1 { background: rgba(248,81,73,0.2); color: var(--red); }
+.sp-2 { background: rgba(210,153,34,0.2); color: var(--yellow); }
+.sp-3 { background: rgba(88,166,255,0.2); color: var(--blue); }
+.sp-4 { background: rgba(63,185,80,0.2); color: var(--green); }
+.sp-none { background: rgba(139,148,158,0.1); color: var(--muted); font-size: 11px; }
+.col-score { text-align: center; }
+.weighted-score { font-size: 15px; font-weight: 800; font-family: monospace; }
+.ws-strong { color: var(--green); }
+.ws-hire { color: var(--blue); }
+.ws-border { color: var(--yellow); }
+.ws-nohire { color: var(--red); }
+.ws-none { color: var(--muted); }
+.cand-decision-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; white-space: nowrap;
+}
+.cb-strong { background: rgba(63,185,80,0.15); color: var(--green); }
+.cb-hire { background: rgba(88,166,255,0.15); color: var(--blue); }
+.cb-border { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.cb-nohire { background: rgba(248,81,73,0.15); color: var(--red); }
+.cb-incomplete { background: rgba(139,148,158,0.12); color: var(--muted); }
+.cand-notes-toggle {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  padding: 3px 8px; border-radius: 5px; cursor: pointer; font-size: 11px;
+  transition: all 0.15s;
+}
+.cand-notes-toggle:hover { color: var(--text); border-color: var(--text); }
+.cand-delete {
+  background: transparent; border: none; color: var(--muted); cursor: pointer;
+  padding: 4px 6px; border-radius: 5px; font-size: 14px; transition: all 0.15s;
+}
+.cand-delete:hover { color: var(--red); background: rgba(248,81,73,0.1); }
+.notes-row td {
+  background: rgba(255,255,255,0.02) !important;
+  padding: 0 !important;
+}
+.notes-row-inner {
+  padding: 10px 12px 14px 14px; font-size: 12px; color: var(--muted);
+  line-height: 1.6; border-left: 3px solid var(--brand); margin: 0 0 0 12px;
+  display: none;
+}
+.notes-row-inner.open { display: block; }
+.notes-row-inner em { font-style: italic; }
+.btn-clear-all {
+  background: rgba(248,81,73,0.1); color: var(--red);
+  border: 1px solid rgba(248,81,73,0.25); padding: 5px 12px;
+  border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.btn-clear-all:hover { background: rgba(248,81,73,0.2); }
+.top-badge {
+  font-size: 9px; background: var(--green); color: #0d1117;
+  padding: 1px 5px; border-radius: 3px; font-weight: 700;
+  margin-left: 6px; vertical-align: middle;
+}
+
+/* ─── SCROLLBARS ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ─── RUBRIC QUICK REF ───────────────────────────────── */
+.rubric-ref { font-size: 10px; }
+.rubric-ref div { display: flex; gap: 6px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.rubric-ref div:last-child { border: none; }
+.rr-score { width: 14px; font-weight: 700; flex-shrink: 0; }
+.rr-4 { color: var(--green); }
+.rr-3 { color: var(--blue); }
+.rr-2 { color: var(--yellow); }
+.rr-1 { color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- ═══ NEW CANDIDATE MODAL ═══ -->
+<div class="modal-overlay" id="newCandidateModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span style="font-size:18px">📋</span>
+      <h3>Candidate Summary</h3>
+    </div>
+    <div class="modal-body">
+      <div class="summary-candidate-name" id="sum-name">—</div>
+      <div class="summary-timestamp" id="sum-time"></div>
+
+      <div class="summary-rows">
+        <div class="summary-row">
+          <span class="summary-row-name">1 · Inbox Triage (20%)</span>
+          <span class="summary-row-score" id="sum-s1">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-name">2 · Close Package (30%)</span>
+          <span class="summary-row-score" id="sum-s2">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-name">3 · AI Fluency (15%)</span>
+          <span class="summary-row-score" id="sum-s3">—</span>
+        </div>
+      </div>
+
+      <div class="summary-total-row" id="sum-total-row">
+        <div>
+          <div class="summary-total-label">Weighted Score</div>
+          <div style="font-size:11px;color:var(--muted)" id="sum-decision-sub">—</div>
+        </div>
+        <div>
+          <span class="summary-total-score" id="sum-total">—</span>
+          <span style="font-size:13px;color:var(--muted)"> / 4.0</span>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Interview Notes</div>
+      <div class="summary-notes-preview" id="sum-notes">No notes recorded.</div>
+
+      <hr class="modal-divider">
+
+      <div style="font-size:12px;color:var(--yellow);margin-bottom:12px">
+        ⚠️ Screenshot or copy scores before resetting — all data will be cleared.
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-cancel-modal" onclick="closeNewCandidateModal()">Cancel</button>
+        <button class="btn btn-screenshot" onclick="window.print()">🖨 Print / Save PDF</button>
+        <button class="btn btn-confirm-reset" onclick="confirmReset()">✓ Reset for Next Candidate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast">⏰ 1 Minute Remaining!</div>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="brand">
+    <div class="brand-logo">R</div>
+    <div>
+      <div class="brand-text">Recess</div>
+    </div>
+  </div>
+  <span class="brand-sep">/</span>
+  <div class="header-title">Senior Accountant Live Test &mdash; Interviewer Dashboard</div>
+  <div class="header-right">
+    <div class="candidate-field">
+      <label>Candidate:</label>
+      <input type="text" id="candidateName" placeholder="Enter candidate name…" />
+    </div>
+    <button class="btn-new-candidate" onclick="openNewCandidateModal()">＋ New Candidate</button>
+    <div class="total-clock">
+      <span class="total-clock-icon">⏱</span>
+      <span class="total-clock-time" id="totalClock">00:00</span>
+      <span class="total-clock-label">elapsed</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ APP BODY ═══ -->
+<div class="app-body">
+
+  <!-- ─── SIDEBAR ─── -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <button class="sec-nav-btn active" id="nav-1" onclick="goSection(1)">
+      <div class="sec-circle" id="circle-1">1</div>
+      <div class="sec-nav-info">
+        <div class="sec-nav-name">Inbox Triage</div>
+        <div class="sec-nav-meta">7 min &bull; 20% weight</div>
+      </div>
+    </button>
+    <button class="sec-nav-btn" id="nav-2" onclick="goSection(2)">
+      <div class="sec-circle" id="circle-2">2</div>
+      <div class="sec-nav-info">
+        <div class="sec-nav-name">Close Package</div>
+        <div class="sec-nav-meta">13 min &bull; 30% weight</div>
+      </div>
+    </button>
+    <button class="sec-nav-btn" id="nav-3" onclick="goSection(3)">
+      <div class="sec-circle" id="circle-3">3</div>
+      <div class="sec-nav-info">
+        <div class="sec-nav-name">AI Fluency</div>
+        <div class="sec-nav-meta">5 min &bull; 15% weight</div>
+      </div>
+    </button>
+    <button class="sec-nav-btn" id="nav-score" onclick="goSection('score')">
+      <div class="sec-circle" style="background:rgba(99,102,241,0.2);border-color:var(--brand)">📊</div>
+      <div class="sec-nav-info">
+        <div class="sec-nav-name">Final Score</div>
+        <div class="sec-nav-meta">Summary &amp; decision</div>
+      </div>
+    </button>
+
+    <button class="sec-nav-btn" id="nav-candidates" onclick="goSection('candidates')">
+      <div class="sec-circle" style="background:rgba(240,136,62,0.2);border-color:var(--orange)">👥</div>
+      <div class="sec-nav-info">
+        <div class="sec-nav-name">All Candidates <span id="cand-count-badge" style="font-size:10px;color:var(--orange)"></span></div>
+        <div class="sec-nav-meta">History &amp; comparison</div>
+      </div>
+    </button>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-tip">
+      <strong>📋 Candidate Prep Email</strong>
+      Send 24–48 hrs before: "25-min practical exercise over Google Meet. Work in a shared doc. You may use any tools you'd normally use on the job, including AI."
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <div class="main-content">
+    <div class="section-area">
+
+      <!-- ════════════ SECTION 1: INBOX ════════════ -->
+      <div class="section-view active" id="sec-1">
+
+        <!-- Timer -->
+        <div class="timer-card">
+          <div class="timer-big" id="timer-1">7:00</div>
+          <div class="timer-meta">
+            <div class="timer-sec-name">Section 1 &mdash; Monday Morning Inbox</div>
+            <div class="timer-sec-sub">Organization &amp; Prioritization &bull; Weight: 20%</div>
+            <div class="timer-controls">
+              <button class="btn btn-start" id="start-1" onclick="startTimer(1)">▶ Start</button>
+              <button class="btn btn-pause" id="pause-1" onclick="pauseTimer(1)">⏸ Pause</button>
+              <button class="btn btn-reset" onclick="resetTimer(1)">↺ Reset</button>
+              <button class="btn btn-next" onclick="goSection(2)">Next Section →</button>
+            </div>
+            <div class="timer-progress">
+              <div class="timer-progress-fill" id="prog-1" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Script -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('script-1')">
+            <span class="acc-icon">📋</span>
+            <span class="acc-title">Script — Read Aloud to Candidate</span>
+            <span class="acc-badge badge-blue">Read aloud</span>
+            <span class="acc-chevron open" id="chev-script-1">▼</span>
+          </div>
+          <div class="acc-body open" id="acc-script-1">
+            <div class="script-box">
+              "You're the Senior Accountant at Recess. You've just returned from 4 days of PTO.
+              It's <em>Monday morning at 9 AM</em> and month-end close is due <em>Wednesday EOD</em>.
+              You have 12 items waiting for your attention.
+              <br><br>
+              Please open the candidate worksheet and do three things: <em>(1)</em> rank the items by priority,
+              <em>(2)</em> note which you'd handle personally vs. delegate, and <em>(3)</em> briefly explain your
+              reasoning for your <em>top 3</em> priorities. You have <em>7 minutes</em>."
+            </div>
+            <div class="script-instr">
+              💡 Start the timer now. Stay quiet. Give a 1-minute verbal warning. Candidate types directly in the worksheet.
+            </div>
+          </div>
+        </div>
+
+        <!-- Observe -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('obs-1')">
+            <span class="acc-icon">👁</span>
+            <span class="acc-title">What to Observe</span>
+            <span class="acc-badge badge-yellow">Behavioral signals</span>
+            <span class="acc-chevron" id="chev-obs-1">▼</span>
+          </div>
+          <div class="acc-body" id="acc-obs-1">
+            <ul class="observe-list">
+              <li><span class="obs-icon">🔍</span> Do they scan all 12 items first, or start sorting immediately? (Scanning first = strong signal)</li>
+              <li><span class="obs-icon">🎯</span> Do they identify #3 (QBO bank feed down) and #12 ($12K discrepancy) as close-blocking top priorities?</li>
+              <li><span class="obs-icon">👑</span> Do they recognize #1 (CEO needs financials by Wed EOD) as the key deadline driving everything?</li>
+              <li><span class="obs-icon">🤝</span> Do they delegate appropriately? (#5 petty cash → staff, #7 HR setup → AP clerk, #11 timesheets → team leads)</li>
+              <li><span class="obs-icon">🧠</span> Do they use a mental framework (urgent/important)? Can they articulate it?</li>
+              <li><span class="obs-icon">⚡</span> Do they catch the dependency — that bank feed (#3) must be fixed BEFORE they can close?</li>
+            </ul>
+            <div class="flag-box">
+              <strong>🚩 Red Flags:</strong> Handling items in listed order (no triage), missing #3 and #12 as blockers,
+              not delegating anything, vague reasoning ("it seemed important").
+            </div>
+          </div>
+        </div>
+
+        <!-- Answer Key -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('ak-1')">
+            <span class="acc-icon">🔑</span>
+            <span class="acc-title">Answer Key — Expected Priorities</span>
+            <span class="acc-badge badge-red">Hidden</span>
+            <span class="acc-chevron" id="chev-ak-1">▼</span>
+          </div>
+          <div class="acc-body" id="acc-ak-1">
+            <div class="ak-locked" id="ak-locked-1">
+              <p>Reveal after section ends or when scoring.</p>
+              <button class="btn btn-reveal" onclick="revealAnswerKey(1)">🔓 Reveal Answer Key</button>
+            </div>
+            <div class="ak-content" id="ak-content-1">
+              <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Expected top-tier priorities (1–4), delegate-eligible items, and reasoning:</p>
+              <table class="inbox-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Item</th>
+                    <th>Priority</th>
+                    <th>Handle / Delegate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="p-critical">
+                    <td><strong>3</strong></td>
+                    <td>Bank feed in QBO stopped syncing (3 days missing)</td>
+                    <td><span class="priority-tag pt-critical">🔴 #1</span></td>
+                    <td>Handle personally — close-blocking</td>
+                  </tr>
+                  <tr class="p-critical">
+                    <td><strong>12</strong></td>
+                    <td>$12K discrepancy in January bank reconciliation</td>
+                    <td><span class="priority-tag pt-critical">🔴 #2</span></td>
+                    <td>Investigate / delegate to staff accountant with clear task</td>
+                  </tr>
+                  <tr class="p-critical">
+                    <td><strong>1</strong></td>
+                    <td>CEO: Board meeting Thursday, needs financials by Wed EOD</td>
+                    <td><span class="priority-tag pt-critical">🔴 #3</span></td>
+                    <td>Handle — defines the close deadline</td>
+                  </tr>
+                  <tr class="p-high">
+                    <td><strong>2</strong></td>
+                    <td>$47K invoices missing approvals, vendors calling</td>
+                    <td><span class="priority-tag pt-high">🟡 #4</span></td>
+                    <td>Delegate to AP clerk with instructions</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6</strong></td>
+                    <td>Sales VP: travel budget 200% spent (CEO asking)</td>
+                    <td><span class="priority-tag pt-high">🟡 #5</span></td>
+                    <td>Handle — requires financial analysis</td>
+                  </tr>
+                  <tr>
+                    <td><strong>9</strong></td>
+                    <td>Monthly 1:1 with CFO at 2 PM today</td>
+                    <td><span class="priority-tag pt-med">🔵 #6</span></td>
+                    <td>Handle — use this to flag close blockers</td>
+                  </tr>
+                  <tr>
+                    <td><strong>7</strong></td>
+                    <td>New hire starting Wednesday — payroll/QBO setup</td>
+                    <td><span class="priority-tag pt-med">🔵 #7</span></td>
+                    <td>Delegate to AP clerk</td>
+                  </tr>
+                  <tr>
+                    <td><strong>8</strong></td>
+                    <td>Insurance broker: $24K renewal due Friday</td>
+                    <td><span class="priority-tag pt-med">🔵 #8</span></td>
+                    <td>Schedule for later this week</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4</strong></td>
+                    <td>External auditors: Q4 depreciation schedule by EOW</td>
+                    <td><span class="priority-tag pt-low">⚪ #9</span></td>
+                    <td>Delegate/schedule — due EOW not today</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5</strong></td>
+                    <td>Asana overdue: Petty cash reconciliation ($500)</td>
+                    <td><span class="priority-tag pt-low">⚪ #10</span></td>
+                    <td>Delegate to staff — immaterial</td>
+                  </tr>
+                  <tr>
+                    <td><strong>10</strong></td>
+                    <td>Tax advisor: extension draft review due next Monday</td>
+                    <td><span class="priority-tag pt-low">⚪ #11</span></td>
+                    <td>Schedule for later this week</td>
+                  </tr>
+                  <tr>
+                    <td><strong>11</strong></td>
+                    <td>Three team members haven't logged hours last week</td>
+                    <td><span class="priority-tag pt-low">⚪ #12</span></td>
+                    <td>Delegate — send a quick message</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sec-1 -->
+
+      <!-- ════════════ SECTION 2: CLOSE PACKAGE ════════════ -->
+      <div class="section-view" id="sec-2">
+
+        <!-- Timer -->
+        <div class="timer-card">
+          <div class="timer-big" id="timer-2">13:00</div>
+          <div class="timer-meta">
+            <div class="timer-sec-name">Section 2 &mdash; Month-End Close Error Detection</div>
+            <div class="timer-sec-sub">Technical Accounting &bull; Weight: 30% &bull; Most Critical Section</div>
+            <div class="timer-controls">
+              <button class="btn btn-start" id="start-2" onclick="startTimer(2)">▶ Start</button>
+              <button class="btn btn-pause" id="pause-2" onclick="pauseTimer(2)">⏸ Pause</button>
+              <button class="btn btn-reset" onclick="resetTimer(2)">↺ Reset</button>
+              <button class="btn btn-next" onclick="goSection(3)">Next Section →</button>
+            </div>
+            <div class="timer-progress">
+              <div class="timer-progress-fill" id="prog-2" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Script -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('script-2')">
+            <span class="acc-icon">📋</span>
+            <span class="acc-title">Script — Read Aloud to Candidate</span>
+            <span class="acc-badge badge-blue">Read aloud</span>
+            <span class="acc-chevron open" id="chev-script-2">▼</span>
+          </div>
+          <div class="acc-body open" id="acc-script-2">
+            <div class="script-box">
+              "Great work. Now for the most important section. Here's a simplified month-end close package for
+              <em>Greenfield Services LLC</em> for January 2026. It includes a trial balance and some supporting documents.
+              <br><br>
+              <em>There are several errors embedded in these materials.</em> Please review them, identify as many issues as you can,
+              explain why each is a problem, and tell me the journal entry you'd record to correct it.
+              <br><br>
+              Note: one piece of data is intentionally correct — let's see if you can spot which.
+              You have <em>13 minutes</em>."
+            </div>
+            <div class="script-instr">
+              💡 If asked: "Is Greenfield accrual-basis?" → Answer: <strong>Yes, accrual basis.</strong>
+              Stay quiet otherwise. Give a 2-minute warning near the end.
+            </div>
+          </div>
+        </div>
+
+        <!-- Trial Balance -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('tb-2')">
+            <span class="acc-icon">📊</span>
+            <span class="acc-title">Trial Balance — Greenfield Services LLC — Jan 31, 2026</span>
+            <span class="acc-badge badge-yellow">Reference Data</span>
+            <span class="acc-chevron open" id="chev-tb-2">▼</span>
+          </div>
+          <div class="acc-body open" id="acc-tb-2">
+            <div class="tb-container">
+              <table class="tb-table">
+                <thead>
+                  <tr>
+                    <th style="width:50%">Account</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="section-row"><td colspan="4">Assets</td></tr>
+                  <tr class="ok-row">
+                    <td>Cash — Operating</td>
+                    <td>$84,320</td><td>—</td>
+                    <td style="font-size:11px;color:var(--green)">✓ Ties to bank rec</td>
+                  </tr>
+                  <tr><td>Accounts Receivable</td><td>$127,500</td><td>—</td><td></td></tr>
+                  <tr class="error-row">
+                    <td>Prepaid Insurance <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>$18,000</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">Should be $16,500</td>
+                  </tr>
+                  <tr class="error-row">
+                    <td>Fixed Assets — Equipment <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>$145,000</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">Missing depreciation & laptop</td>
+                  </tr>
+                  <tr><td>Accumulated Depreciation</td><td>—</td><td>$29,000</td><td></td></tr>
+                  <tr class="section-row"><td colspan="4">Liabilities</td></tr>
+                  <tr><td>Accounts Payable</td><td>—</td><td>$43,200</td><td></td></tr>
+                  <tr class="error-row">
+                    <td>Accrued Liabilities <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>—</td><td>$8,500</td>
+                    <td style="font-size:11px;color:var(--red)">Missing utility accrual</td>
+                  </tr>
+                  <tr class="error-row">
+                    <td>Deferred Revenue <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>—</td><td>$18,000</td>
+                    <td style="font-size:11px;color:var(--red)">1/6 should be recognized</td>
+                  </tr>
+                  <tr class="section-row"><td colspan="4">Revenue</td></tr>
+                  <tr><td>Revenue — Consulting</td><td>—</td><td>$212,000</td><td></td></tr>
+                  <tr class="section-row"><td colspan="4">Expenses</td></tr>
+                  <tr><td>Cost of Services</td><td>$98,400</td><td>—</td><td></td></tr>
+                  <tr><td>Rent Expense</td><td>$12,000</td><td>—</td><td></td></tr>
+                  <tr class="error-row">
+                    <td>Office Supplies <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>$9,200</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">$6,200 laptop should be capex</td>
+                  </tr>
+                  <tr class="error-row">
+                    <td>Utilities Expense <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>$0</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">$2,100 bill unrecorded</td>
+                  </tr>
+                  <tr class="error-row">
+                    <td>Depreciation Expense <span class="error-indicator">⚠ ERROR</span></td>
+                    <td>$0</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">$1,208 should be recorded</td>
+                  </tr>
+                  <tr class="error-row">
+                    <td>Marketing Expense <span class="error-indicator">⚠ VARIANCE</span></td>
+                    <td>$31,500</td><td>—</td>
+                    <td style="font-size:11px;color:var(--red)">vs. $10,200 Dec (+209%)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="supporting-docs">
+              <div class="doc-card doc-is-ok">
+                <div class="doc-card-title">🏦 Bank Reconciliation</div>
+                Bank statement: $86,120<br>
+                Outstanding check: ($2,400)<br>
+                Deposit in transit: +$600<br>
+                <strong>Book balance: $84,320 ✓ Ties correctly</strong><br>
+                <span style="font-size:10px;color:var(--green)">This is the intentional "trap" — bank rec is CORRECT</span>
+              </div>
+              <div class="doc-card doc-has-error">
+                <div class="doc-card-title">📄 Supporting Notes</div>
+                • Insurance: $18,000 annual premium paid Jan 1 (Jan–Dec 2026)<br>
+                • Equipment: Annual straight-line depreciation = $14,500/yr<br>
+                • Deferred Revenue: Client prepaid $18K for 6 months (Jan–Jun)<br>
+                • Utility bill: $2,100 received Jan 28 — not yet recorded<br>
+                • Laptop $6,200 purchased Jan 15 — coded to Office Supplies<br>
+                • Marketing: $10,200 in December
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Observe -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('obs-2')">
+            <span class="acc-icon">👁</span>
+            <span class="acc-title">What to Observe</span>
+            <span class="acc-badge badge-yellow">Behavioral signals</span>
+            <span class="acc-chevron" id="chev-obs-2">▼</span>
+          </div>
+          <div class="acc-body" id="acc-obs-2">
+            <ul class="observe-list">
+              <li><span class="obs-icon">🔢</span> Do they work systematically top-to-bottom, or jump to most material accounts?</li>
+              <li><span class="obs-icon">🏦</span> Do they correctly confirm the bank rec ties — and NOT invent a problem? (Tests honesty and precision)</li>
+              <li><span class="obs-icon">📉</span> Do they flag the marketing variance independently, without being asked?</li>
+              <li><span class="obs-icon">✍️</span> Can they write proper journal entries (DR/CR) on the spot?</li>
+              <li><span class="obs-icon">💰</span> Do they mention financial statement impact? (e.g. "This understates expenses, overstates income")</li>
+              <li><span class="obs-icon">⚖️</span> Do they prioritize by materiality? (Prepaid $1,500, Deferred Rev $3,000, Laptop $6,200, Depreciation $1,208)</li>
+            </ul>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;font-size:11px">
+              <div class="flag-box">
+                <strong>🏆 Strong candidate:</strong> Finds 5–6 errors with correct journal entries, confirms bank rec ties, flags marketing variance proactively.
+              </div>
+              <div class="flag-box" style="border-left-color:var(--blue)">
+                <strong>✅ Good candidate:</strong> Finds 3–4 errors. Acceptable at this level.
+              </div>
+              <div class="flag-box" style="border-left-color:var(--red)">
+                <strong>🚩 Concern:</strong> Fewer than 2 errors, wrong journal entries, misidentifies the bank rec as an error, misses $0 depreciation.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Answer Key -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('ak-2')">
+            <span class="acc-icon">🔑</span>
+            <span class="acc-title">Answer Key — All 6 Errors</span>
+            <span class="acc-badge badge-red">Hidden</span>
+            <span class="acc-chevron" id="chev-ak-2">▼</span>
+          </div>
+          <div class="acc-body" id="acc-ak-2">
+            <div class="ak-locked" id="ak-locked-2">
+              <p>Reveal after section ends or when scoring.</p>
+              <button class="btn btn-reveal" onclick="revealAnswerKey(2)">🔓 Reveal Answer Key</button>
+            </div>
+            <div class="ak-content" id="ak-content-2">
+              <div class="errors-found-counter">
+                <span class="errors-label">Errors candidate found:</span>
+                <div class="errors-btns" id="error-counter">
+                  <button class="error-count-btn" onclick="setErrors(0)">0</button>
+                  <button class="error-count-btn" onclick="setErrors(1)">1</button>
+                  <button class="error-count-btn" onclick="setErrors(2)">2</button>
+                  <button class="error-count-btn" onclick="setErrors(3)">3</button>
+                  <button class="error-count-btn" onclick="setErrors(4)">4</button>
+                  <button class="error-count-btn" onclick="setErrors(5)">5</button>
+                  <button class="error-count-btn" onclick="setErrors(6)">6</button>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">1</div>
+                  <div class="ak-error-name">Unrecorded Utility Accrual</div>
+                  <span class="acc-badge badge-yellow">$2,100</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">$2,100 utility bill received Jan 28 — expense incurred but not recorded. Under accrual basis, expenses are recognized when incurred.</div>
+                  <div class="ak-je">DR  Utilities Expense        $2,100<br>CR  Accrued Liabilities       $2,100</div>
+                  <div class="ak-note">Impact: Understates expenses by $2,100 → Overstates net income</div>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">2</div>
+                  <div class="ak-error-name">Prepaid Insurance Not Amortized</div>
+                  <span class="acc-badge badge-yellow">$1,500</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">Annual premium of $18,000 / 12 months = $1,500 per month must be expensed. Prepaid balance should be $16,500 after January.</div>
+                  <div class="ak-je">DR  Insurance Expense         $1,500<br>CR  Prepaid Insurance          $1,500</div>
+                  <div class="ak-note">Impact: Prepaid overstated by $1,500, expenses understated</div>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">3</div>
+                  <div class="ak-error-name">No Depreciation Recorded</div>
+                  <span class="acc-badge badge-red">$1,208</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">Annual depreciation is $14,500, meaning $1,208.33/month should be recorded. Depreciation Expense shows $0.</div>
+                  <div class="ak-je">DR  Depreciation Expense     $1,208<br>CR  Accumulated Depreciation  $1,208</div>
+                  <div class="ak-note">This is a classic close item — missing depreciation is a fundamental oversight</div>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">4</div>
+                  <div class="ak-error-name">Deferred Revenue Not Recognized</div>
+                  <span class="acc-badge badge-yellow">$3,000</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">Client prepaid $18,000 for 6 months (Jan–Jun). January = 1/6 of contract = $3,000 should be recognized as earned revenue. Deferred Revenue should be $15,000.</div>
+                  <div class="ak-je">DR  Deferred Revenue          $3,000<br>CR  Revenue — Consulting       $3,000</div>
+                  <div class="ak-note">Impact: Revenue understated by $3,000 (ASC 606 / matching principle)</div>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">5</div>
+                  <div class="ak-error-name">Misclassified Capital Expenditure</div>
+                  <span class="acc-badge badge-red">$6,200</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">$6,200 laptop purchased Jan 15 was coded to Office Supplies expense. Laptops meeting capitalization threshold should be fixed assets and depreciated.</div>
+                  <div class="ak-je">DR  Fixed Assets — Equipment  $6,200<br>CR  Office Supplies            $6,200</div>
+                  <div class="ak-note">Impact: Expenses overstated by $6,200; Fixed assets understated</div>
+                </div>
+              </div>
+              <div class="ak-item">
+                <div class="ak-item-header">
+                  <div class="ak-num">6</div>
+                  <div class="ak-error-name">Marketing Expense — Unusual Variance (209%)</div>
+                  <span class="acc-badge badge-yellow">Flag for Investigation</span>
+                </div>
+                <div class="ak-item-body">
+                  <div class="ak-why">Marketing jumped from $10,200 (Dec) to $31,500 (Jan) — a $21,300 increase (+209%). This may not be an error, but must be investigated and explained before close.</div>
+                  <div class="ak-je">No JE required yet — needs investigation.<br>Ask: What drove the spike? Campaign? Timing difference? Miscoding?</div>
+                  <div class="ak-note">🏦 BANK REC NOTE: Cash $84,320 = $86,120 − $2,400 + $600 → This TIES correctly. A strong candidate confirms this without inventing a problem.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sec-2 -->
+
+      <!-- ════════════ SECTION 3: AI FLUENCY ════════════ -->
+      <div class="section-view" id="sec-3">
+
+        <!-- Timer -->
+        <div class="timer-card">
+          <div class="timer-big" id="timer-3">5:00</div>
+          <div class="timer-meta">
+            <div class="timer-sec-name">Section 3 &mdash; AI Fluency</div>
+            <div class="timer-sec-sub">Prompt Writing + Discussion &bull; Weight: 15%</div>
+            <div class="timer-controls">
+              <button class="btn btn-start" id="start-3" onclick="startTimer(3)">▶ Start</button>
+              <button class="btn btn-pause" id="pause-3" onclick="pauseTimer(3)">⏸ Pause</button>
+              <button class="btn btn-reset" onclick="resetTimer(3)">↺ Reset</button>
+              <button class="btn btn-next" onclick="goSection('score')" style="background:var(--green);color:#0d1117">View Final Score →</button>
+            </div>
+            <div class="timer-progress">
+              <div class="timer-progress-fill" id="prog-3" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Script -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('script-3')">
+            <span class="acc-icon">📋</span>
+            <span class="acc-title">Script — Read Aloud to Candidate</span>
+            <span class="acc-badge badge-blue">Read aloud</span>
+            <span class="acc-chevron open" id="chev-script-3">▼</span>
+          </div>
+          <div class="acc-body open" id="acc-script-3">
+            <div class="script-box">
+              "Last section — this one is quick. Based on the marketing expense variance we just saw — it jumped from
+              <em>$10,200 in December to $31,500 in January, a 209% increase</em>.
+              <br><br>
+              In the worksheet, write the <em>AI prompt you'd use</em> to draft a variance analysis narrative explaining
+              this to your CFO. Then below it, tell me: <em>what would you verify</em> before sending that AI output?"
+            </div>
+            <div class="script-instr">
+              💡 Part A (3 min): Let them write the prompt. Part B (2 min): Pick 1-2 discussion questions below. Start timer now.
+            </div>
+          </div>
+        </div>
+
+        <!-- Discussion Questions -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('dq-3')">
+            <span class="acc-icon">💬</span>
+            <span class="acc-title">Discussion Questions (pick 1–2)</span>
+            <span class="acc-badge badge-blue">Verbal</span>
+            <span class="acc-chevron open" id="chev-dq-3">▼</span>
+          </div>
+          <div class="acc-body open" id="acc-dq-3">
+            <div class="discussion-qs">
+              <div class="dq">"What's one accounting task you currently use AI for — or wish you could — that would save significant time each month?"</div>
+              <div class="dq">"What are the risks of using AI tools like ChatGPT with real client financial data? How would you manage that at Recess?"</div>
+              <div class="dq">"If you were building our team's AI toolkit, what's the first workflow you'd automate?"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signals -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('sig-3')">
+            <span class="acc-icon">👁</span>
+            <span class="acc-title">What to Look For — Strong vs. Weak Signals</span>
+            <span class="acc-badge badge-yellow">Evaluation guide</span>
+            <span class="acc-chevron" id="chev-sig-3">▼</span>
+          </div>
+          <div class="acc-body" id="acc-sig-3">
+            <div class="ai-signals">
+              <div class="signal-box signal-strong">
+                <div class="signal-title">✅ Strong Signals</div>
+                <ul class="signal-list">
+                  <li>Prompt includes context, numbers, audience, constraints</li>
+                  <li>Specifies format/tone ("keep under 200 words")</li>
+                  <li>Mentions verifying numbers before sending</li>
+                  <li>Flags hallucination risk and data privacy</li>
+                  <li>Names specific tools (Claude, ChatGPT, Copilot)</li>
+                  <li>Real accounting use cases (JE drafts, formula gen, SOP first drafts)</li>
+                  <li>Mentions not uploading real client data to public tools</li>
+                </ul>
+              </div>
+              <div class="signal-box signal-weak">
+                <div class="signal-title">🚩 Weak Signals</div>
+                <ul class="signal-list">
+                  <li>Generic prompt with no context or numbers</li>
+                  <li>Would trust AI output without review</li>
+                  <li>Has never used AI tools professionally</li>
+                  <li>Dismisses AI as irrelevant to accounting</li>
+                  <li>No awareness of data privacy risks</li>
+                  <li>Treats AI as a novelty, not a workflow tool</li>
+                </ul>
+              </div>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin-top:10px">
+              💡 A <strong>strong prompt example</strong>: "You are a financial analyst. Marketing expense for Greenfield Services LLC increased from $10,200 in December to $31,500 in January (209%). Write a 150-word variance analysis narrative for the CFO explaining potential causes and next steps. Use professional but direct language."
+            </p>
+          </div>
+        </div>
+
+        <!-- Debrief -->
+        <div class="acc-card">
+          <div class="acc-header" onclick="toggleAcc('debrief-3')">
+            <span class="acc-icon">🎤</span>
+            <span class="acc-title">Closing Debrief (2 min after timer)</span>
+            <span class="acc-badge badge-green">Optional</span>
+            <span class="acc-chevron" id="chev-debrief-3">▼</span>
+          </div>
+          <div class="acc-body" id="acc-debrief-3">
+            <div class="script-box">
+              "That's everything — thank you, that was great. Before we wrap: <em>how did that feel?</em>
+              Is there anything from the close package section you'd want to revisit or add?"
+            </div>
+            <div class="script-instr">
+              💡 This is your final read on self-awareness, composure, and whether they caught something they missed.
+              Strong candidates will often surface an error they didn't have time to explain fully.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sec-3 -->
+
+      <!-- ════════════ SECTION: FINAL SCORE ════════════ -->
+      <div class="section-view" id="sec-score">
+        <div class="acc-card">
+          <div class="acc-header" style="cursor:default">
+            <span class="acc-icon">📊</span>
+            <span class="acc-title">Final Score Summary</span>
+          </div>
+          <div class="acc-body open" style="display:block">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div>
+                <p style="font-size:13px;margin-bottom:14px;color:var(--muted)">Scored sections and weighted total:</p>
+                <table style="width:100%;font-size:13px;border-collapse:collapse">
+                  <thead>
+                    <tr style="font-size:11px;text-transform:uppercase;color:var(--muted)">
+                      <th style="text-align:left;padding:6px 0">Section</th>
+                      <th style="text-align:center;padding:6px 8px">Weight</th>
+                      <th style="text-align:center;padding:6px 8px">Score</th>
+                      <th style="text-align:right;padding:6px 0">Weighted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-top:1px solid var(--border)">
+                      <td style="padding:8px 0">Inbox Triage</td>
+                      <td style="text-align:center;padding:8px">20%</td>
+                      <td style="text-align:center;padding:8px;font-weight:700" id="fs-s1">—</td>
+                      <td style="text-align:right;padding:8px 0" id="fs-w1">—</td>
+                    </tr>
+                    <tr style="border-top:1px solid var(--border)">
+                      <td style="padding:8px 0">Close Package</td>
+                      <td style="text-align:center;padding:8px">30%</td>
+                      <td style="text-align:center;padding:8px;font-weight:700" id="fs-s2">—</td>
+                      <td style="text-align:right;padding:8px 0" id="fs-w2">—</td>
+                    </tr>
+                    <tr style="border-top:1px solid var(--border)">
+                      <td style="padding:8px 0">AI Fluency</td>
+                      <td style="text-align:center;padding:8px">15%</td>
+                      <td style="text-align:center;padding:8px;font-weight:700" id="fs-s3">—</td>
+                      <td style="text-align:right;padding:8px 0" id="fs-w3">—</td>
+                    </tr>
+                    <tr style="border-top:2px solid var(--border);font-weight:700">
+                      <td style="padding:10px 0">Weighted Total</td>
+                      <td style="text-align:center;padding:10px">65%</td>
+                      <td></td>
+                      <td style="text-align:right;padding:10px 0" id="fs-total">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p style="font-size:10px;color:var(--muted);margin-top:6px">* Remaining 35% (Async Work + SOP Writing) not tested in 25-min format. Scale adjusts accordingly.</p>
+              </div>
+              <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+                <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Decision</div>
+                <div style="font-size:64px;font-weight:800;font-family:monospace" id="fs-big-score">—</div>
+                <div id="fs-decision-badge" class="decision-badge d-pending">Score sections →</div>
+                <div id="fs-decision-sub" style="font-size:11px;color:var(--muted)">Fill in scores on the right panel</div>
+                <div class="critical-flag" id="fs-critical-flag">
+                  ⚠️ Scored 1 on Close Package — Do not advance regardless of total score
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+              <p style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Interview Notes</p>
+              <textarea style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-size:12px;resize:none;height:100px;font-family:inherit;line-height:1.5;outline:none" id="final-notes" placeholder="Overall impressions, standout moments, areas of concern…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div><!-- /sec-score -->
+
+      <!-- ════════════ SECTION: ALL CANDIDATES ════════════ -->
+      <div class="section-view" id="sec-candidates">
+
+        <div class="candidates-toolbar">
+          <h2>👥 Candidate History &amp; Comparison</h2>
+          <button class="btn-clear-all" onclick="clearAllCandidates()">🗑 Clear All</button>
+        </div>
+
+        <!-- Stats bar -->
+        <div class="candidates-stats" id="cand-stats" style="display:none">
+          <div class="cstat">
+            <div class="cstat-num" id="cstat-count">0</div>
+            <div class="cstat-label">Candidates</div>
+          </div>
+          <div class="cstat">
+            <div class="cstat-num" id="cstat-avg">—</div>
+            <div class="cstat-label">Avg Score</div>
+          </div>
+          <div class="cstat">
+            <div class="cstat-num" id="cstat-best">—</div>
+            <div class="cstat-label">Top Score</div>
+          </div>
+          <div class="cstat">
+            <div class="cstat-num" id="cstat-hire" style="color:var(--green)">0</div>
+            <div class="cstat-label">Hire / Strong Hire</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="acc-card">
+          <div id="candidates-list">
+            <div class="candidates-empty">
+              <span class="empty-icon">📋</span>
+              No candidates recorded yet.<br>
+              Scores are saved automatically when you click<br>
+              <strong>"Reset for Next Candidate"</strong>.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sec-candidates -->
+
+    </div><!-- /section-area -->
+
+    <!-- ─── SCORE PANEL ─── -->
+    <div class="score-panel">
+
+      <div class="score-card">
+        <div class="score-card-title">Live Scorecard</div>
+
+        <div class="score-row">
+          <div class="score-row-header">
+            <span class="score-row-name">1. Inbox Triage</span>
+            <span class="score-row-weight">20%</span>
+          </div>
+          <div class="score-btns">
+            <button class="sc-btn s1" onclick="setScore(1,1)" title="Insufficient">1</button>
+            <button class="sc-btn s2" onclick="setScore(1,2)" title="Developing">2</button>
+            <button class="sc-btn s3" onclick="setScore(1,3)" title="Proficient">3</button>
+            <button class="sc-btn s4" onclick="setScore(1,4)" title="Exceptional">4</button>
+          </div>
+          <div class="score-row-rubric" id="rubric-1"></div>
+        </div>
+
+        <div class="score-row">
+          <div class="score-row-header">
+            <span class="score-row-name">2. Close Package</span>
+            <span class="score-row-weight">30% ⭐</span>
+          </div>
+          <div class="score-btns">
+            <button class="sc-btn s1" onclick="setScore(2,1)" title="Insufficient">1</button>
+            <button class="sc-btn s2" onclick="setScore(2,2)" title="Developing">2</button>
+            <button class="sc-btn s3" onclick="setScore(2,3)" title="Proficient">3</button>
+            <button class="sc-btn s4" onclick="setScore(2,4)" title="Exceptional">4</button>
+          </div>
+          <div class="score-row-rubric" id="rubric-2"></div>
+        </div>
+
+        <div class="score-row">
+          <div class="score-row-header">
+            <span class="score-row-name">3. AI Fluency</span>
+            <span class="score-row-weight">15%</span>
+          </div>
+          <div class="score-btns">
+            <button class="sc-btn s1" onclick="setScore(3,1)" title="Insufficient">1</button>
+            <button class="sc-btn s2" onclick="setScore(3,2)" title="Developing">2</button>
+            <button class="sc-btn s3" onclick="setScore(3,3)" title="Proficient">3</button>
+            <button class="sc-btn s4" onclick="setScore(3,4)" title="Exceptional">4</button>
+          </div>
+          <div class="score-row-rubric" id="rubric-3"></div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:8px 0">
+        <div class="rubric-ref">
+          <div><span class="rr-score rr-4">4</span> Exceptional — mastery</div>
+          <div><span class="rr-score rr-3">3</span> Proficient — solid</div>
+          <div><span class="rr-score rr-2">2</span> Developing — gaps</div>
+          <div><span class="rr-score rr-1">1</span> Insufficient — below bar</div>
+        </div>
+      </div>
+
+      <div class="total-score-card">
+        <div class="total-score-label">Weighted Score</div>
+        <div class="total-score-num" id="total-score-display">—</div>
+        <div class="total-score-max">out of 4.0</div>
+        <div class="decision-badge d-pending" id="decision-badge">Score all sections</div>
+        <div class="decision-sub" id="decision-sub">
+          3.5–4.0 = Strong Hire<br>
+          2.8–3.4 = Hire<br>
+          2.0–2.7 = Borderline<br>
+          &lt;2.0 = No Hire
+        </div>
+        <div class="critical-flag" id="critical-flag-mini">
+          ⚠️ Score 1 on Close = Instant No-Hire
+        </div>
+      </div>
+
+      <div class="notes-card">
+        <h4>Interview Notes</h4>
+        <textarea placeholder="Process observations, standout moments, concerns…&#10;&#10;e.g. 'Scanned all items first ✓', 'Missed depreciation initially', 'Strong on bank rec…'"></textarea>
+      </div>
+
+    </div><!-- /score-panel -->
+
+  </div><!-- /main-content -->
+</div><!-- /app-body -->
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const TIMERS = {
+  1: { total: 420, remaining: 420, running: false, interval: null },
+  2: { total: 780, remaining: 780, running: false, interval: null },
+  3: { total: 300, remaining: 300, running: false, interval: null }
+};
+const scores = { 1: null, 2: null, 3: null };
+const weights = { 1: 0.20, 2: 0.30, 3: 0.15 };
+const rubrics = {
+  1: { 1:'No prioritization; handles items in order; misses bank feed and rec issues',
+       2:'Misses critical close-blockers (#3/#12); limited delegation',
+       3:'Prioritizes most logically; identifies key deliverable; minor gaps',
+       4:'Scans all items first; uses clear framework; delegates 3+ items; catches all blockers' },
+  2: { 1:'Fewer than 2 errors found; wrong journal entries; misidentifies bank rec',
+       2:'2–3 errors found; some JEs incomplete; limited insight on impact',
+       3:'3–4 errors with mostly correct JEs; correctly handles bank rec',
+       4:'5–6 errors; correct JEs; confirms bank rec ties; discusses P&L impact; flags variance' },
+  3: { 1:'No AI tool experience; cannot write effective prompt; dismissive of AI',
+       2:'Generic prompt; no verification steps; limited real-world AI use',
+       3:'Reasonable prompt; mentions checking output; some AI experience; aware of basics',
+       4:'Specific prompt with context/constraints; names tools; flags data privacy; clear use cases' }
+};
+
+// Total elapsed timer
+let totalSeconds = 0;
+setInterval(() => {
+  totalSeconds++;
+  const m = String(Math.floor(totalSeconds/60)).padStart(2,'0');
+  const s = String(totalSeconds%60).padStart(2,'0');
+  document.getElementById('totalClock').textContent = m+':'+s;
+}, 1000);
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function goSection(n) {
+  // Hide all
+  document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sec-nav-btn').forEach(b => b.classList.remove('active'));
+
+  if (n === 'score') {
+    document.getElementById('sec-score').classList.add('active');
+    document.getElementById('nav-score').classList.add('active');
+    updateFinalScore();
+  } else if (n === 'candidates') {
+    document.getElementById('sec-candidates').classList.add('active');
+    document.getElementById('nav-candidates').classList.add('active');
+    renderCandidateHistory();
+  } else {
+    document.getElementById('sec-'+n).classList.add('active');
+    document.getElementById('nav-'+n).classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════
+function formatTime(s) {
+  const m = Math.floor(s/60);
+  const sec = s%60;
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+function startTimer(n) {
+  const t = TIMERS[n];
+  if (t.running) return;
+  t.running = true;
+  document.getElementById('start-'+n).style.display = 'none';
+  document.getElementById('pause-'+n).style.display = 'inline-block';
+
+  t.interval = setInterval(() => {
+    t.remaining--;
+    const el = document.getElementById('timer-'+n);
+    el.textContent = formatTime(t.remaining);
+
+    // Progress bar
+    const pct = (t.remaining / t.total) * 100;
+    document.getElementById('prog-'+n).style.width = pct+'%';
+
+    // Color changes
+    el.className = 'timer-big';
+    if (t.remaining <= 60 && t.remaining > 20) el.classList.add('warn');
+    if (t.remaining <= 20) el.classList.add('urgent');
+
+    // 1-minute warning toast
+    if (t.remaining === 60) showToast('⏰ 1 Minute Remaining — Section '+n);
+
+    if (t.remaining <= 0) {
+      clearInterval(t.interval);
+      t.running = false;
+      el.textContent = 'TIME';
+      el.classList.add('urgent');
+      document.getElementById('pause-'+n).style.display = 'none';
+      document.getElementById('start-'+n).style.display = 'inline-block';
+      document.getElementById('start-'+n).disabled = true;
+      document.getElementById('nav-'+n).classList.add('done');
+      document.getElementById('circle-'+n).textContent = '✓';
+      showToast('⏱ Section '+n+' — Time Up!');
+    }
+  }, 1000);
+}
+
+function pauseTimer(n) {
+  const t = TIMERS[n];
+  clearInterval(t.interval);
+  t.running = false;
+  document.getElementById('start-'+n).style.display = 'inline-block';
+  document.getElementById('pause-'+n).style.display = 'none';
+}
+
+function resetTimer(n) {
+  const t = TIMERS[n];
+  clearInterval(t.interval);
+  t.running = false;
+  t.remaining = t.total;
+  document.getElementById('timer-'+n).textContent = formatTime(t.total);
+  document.getElementById('timer-'+n).className = 'timer-big';
+  document.getElementById('prog-'+n).style.width = '100%';
+  document.getElementById('start-'+n).style.display = 'inline-block';
+  document.getElementById('start-'+n).disabled = false;
+  document.getElementById('pause-'+n).style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════
+//  ACCORDION
+// ═══════════════════════════════════════════════
+function toggleAcc(id) {
+  const body = document.getElementById('acc-'+id);
+  const chev = document.getElementById('chev-'+id);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  if (chev) chev.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════════
+//  ANSWER KEY
+// ═══════════════════════════════════════════════
+function revealAnswerKey(n) {
+  document.getElementById('ak-locked-'+n).style.display = 'none';
+  document.getElementById('ak-content-'+n).classList.add('revealed');
+}
+
+// ═══════════════════════════════════════════════
+//  SCORING
+// ═══════════════════════════════════════════════
+function setScore(section, score) {
+  scores[section] = score;
+
+  // Update buttons
+  const btns = document.querySelectorAll(`.sc-btn.s${score}`);
+  // Clear all buttons for this section
+  document.querySelectorAll('.sc-btn').forEach((b, i) => {
+    const sectionBtns = b.closest('.score-row').querySelectorAll('.sc-btn');
+    // Check if this is the right section
+  });
+
+  // Simpler: find by index
+  const allRows = document.querySelectorAll('.score-row');
+  const row = allRows[section-1];
+  row.querySelectorAll('.sc-btn').forEach(b => {
+    b.className = b.className.replace(/sel-\d/g,'').trim();
+  });
+  const rowBtns = row.querySelectorAll('.sc-btn');
+  rowBtns[score-1].classList.add('sel-'+score);
+
+  // Update rubric
+  document.getElementById('rubric-'+section).textContent = rubrics[section][score];
+
+  // Recalculate total
+  calcTotal();
+}
+
+function calcTotal() {
+  let total = 0;
+  let allScored = true;
+  let scoreSum = 0;
+  let weightSum = 0;
+
+  [1,2,3].forEach(s => {
+    if (scores[s] !== null) {
+      scoreSum += scores[s] * weights[s];
+      weightSum += weights[s];
+    } else {
+      allScored = false;
+    }
+  });
+
+  // Scale to 4.0 based on sections scored
+  const scaled = weightSum > 0 ? (scoreSum / weightSum) : 0;
+
+  const display = document.getElementById('total-score-display');
+  const badge = document.getElementById('decision-badge');
+  const sub = document.getElementById('decision-sub');
+  const critFlag = document.getElementById('critical-flag-mini');
+
+  if (!allScored) {
+    display.textContent = scoreSum > 0 ? scaled.toFixed(2) : '—';
+    badge.textContent = 'Score all sections';
+    badge.className = 'decision-badge d-pending';
+    return;
+  }
+
+  display.textContent = scaled.toFixed(2);
+
+  // Decision
+  critFlag.style.display = scores[2] === 1 ? 'block' : 'none';
+
+  if (scores[2] === 1) {
+    badge.textContent = '🚫 No Hire';
+    badge.className = 'decision-badge d-nohire';
+    sub.textContent = 'Critical fail: scored 1 on Close Package';
+  } else if (scaled >= 3.5) {
+    badge.textContent = '⭐ Strong Hire';
+    badge.className = 'decision-badge d-strong';
+    sub.textContent = 'Exceptional — ready to own the function';
+  } else if (scaled >= 2.8) {
+    badge.textContent = '✅ Hire';
+    badge.className = 'decision-badge d-hire';
+    sub.textContent = 'Solid performer with minor development areas';
+  } else if (scaled >= 2.0) {
+    badge.textContent = '⚠️ Borderline';
+    badge.className = 'decision-badge d-border';
+    sub.textContent = 'Gaps — discuss with hiring team';
+  } else {
+    badge.textContent = '🚫 No Hire';
+    badge.className = 'decision-badge d-nohire';
+    sub.textContent = 'Significant gaps for a senior role';
+  }
+
+  updateFinalScore();
+}
+
+function updateFinalScore() {
+  const names = {1:'Inbox Triage', 2:'Close Package', 3:'AI Fluency'};
+  let weightedTotal = 0;
+  let allScored = true;
+
+  [1,2,3].forEach(s => {
+    const score = scores[s];
+    if (score !== null) {
+      document.getElementById('fs-s'+s).textContent = score;
+      document.getElementById('fs-w'+s).textContent = (score * weights[s]).toFixed(2);
+      weightedTotal += score * weights[s];
+    } else {
+      document.getElementById('fs-s'+s).textContent = '—';
+      document.getElementById('fs-w'+s).textContent = '—';
+      allScored = false;
+    }
+  });
+
+  const totalEl = document.getElementById('fs-total');
+  const bigScore = document.getElementById('fs-big-score');
+  const badge = document.getElementById('fs-decision-badge');
+  const sub = document.getElementById('fs-decision-sub');
+  const crit = document.getElementById('fs-critical-flag');
+
+  if (!allScored) {
+    totalEl.textContent = '—';
+    bigScore.textContent = '—';
+    badge.className = 'decision-badge d-pending';
+    badge.textContent = 'Score sections →';
+    return;
+  }
+
+  // Scale score (65% of total weight tested)
+  const scaled = weightedTotal / 0.65;
+  totalEl.textContent = scaled.toFixed(2);
+  bigScore.textContent = scaled.toFixed(2);
+
+  crit.style.display = scores[2] === 1 ? 'block' : 'none';
+
+  if (scores[2] === 1) {
+    badge.textContent = '🚫 No Hire'; badge.className = 'decision-badge d-nohire';
+    sub.textContent = 'Critical fail: Close Package scored 1';
+  } else if (scaled >= 3.5) {
+    badge.textContent = '⭐ Strong Hire'; badge.className = 'decision-badge d-strong';
+    sub.textContent = 'Exceptional across all competencies tested';
+  } else if (scaled >= 2.8) {
+    badge.textContent = '✅ Hire'; badge.className = 'decision-badge d-hire';
+    sub.textContent = 'Solid performer — recommend advancing';
+  } else if (scaled >= 2.0) {
+    badge.textContent = '⚠️ Borderline'; badge.className = 'decision-badge d-border';
+    sub.textContent = 'Discuss with hiring team before advancing';
+  } else {
+    badge.textContent = '🚫 No Hire'; badge.className = 'decision-badge d-nohire';
+    sub.textContent = 'Significant gaps for this level';
+  }
+}
+
+function setErrors(n) {
+  document.querySelectorAll('.error-count-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === n);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
+}
+
+// ═══════════════════════════════════════════════
+//  NEW CANDIDATE MODAL
+// ═══════════════════════════════════════════════
+function openNewCandidateModal() {
+  // Populate summary
+  const name = document.getElementById('candidateName').value.trim() || 'Unnamed Candidate';
+  document.getElementById('sum-name').textContent = name;
+  document.getElementById('sum-time').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) +
+    ' — ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+
+  // Scores
+  const scoreColors = { 1:'sr-1', 2:'sr-2', 3:'sr-3', 4:'sr-4' };
+  [1,2,3].forEach(s => {
+    const el = document.getElementById('sum-s'+s);
+    el.textContent = scores[s] !== null ? scores[s] : '—';
+    el.className = 'summary-row-score ' + (scores[s] ? scoreColors[scores[s]] : 'sr-none');
+  });
+
+  // Weighted total
+  const allScored = scores[1] !== null && scores[2] !== null && scores[3] !== null;
+  const totalEl = document.getElementById('sum-total');
+  const subEl = document.getElementById('sum-decision-sub');
+  const rowEl = document.getElementById('sum-total-row');
+
+  if (allScored) {
+    const weighted = scores[1]*0.20 + scores[2]*0.30 + scores[3]*0.15;
+    const scaled = (weighted / 0.65).toFixed(2);
+    totalEl.textContent = scaled;
+    totalEl.style.color = parseFloat(scaled) >= 3.5 ? 'var(--green)' :
+                          parseFloat(scaled) >= 2.8 ? 'var(--blue)' :
+                          parseFloat(scaled) >= 2.0 ? 'var(--yellow)' : 'var(--red)';
+    subEl.textContent = parseFloat(scaled) >= 3.5 ? '⭐ Strong Hire' :
+                        parseFloat(scaled) >= 2.8 ? '✅ Hire' :
+                        parseFloat(scaled) >= 2.0 ? '⚠️ Borderline' : '🚫 No Hire';
+    if (scores[2] === 1) { subEl.textContent = '🚫 No Hire — Critical fail on Close'; }
+  } else {
+    totalEl.textContent = '—';
+    totalEl.style.color = 'var(--muted)';
+    subEl.textContent = 'Not all sections scored';
+  }
+
+  // Notes
+  const notes = document.querySelector('.notes-card textarea').value.trim();
+  const notesEl = document.getElementById('sum-notes');
+  notesEl.textContent = notes || 'No notes recorded.';
+  notesEl.classList.toggle('empty', !notes);
+
+  document.getElementById('newCandidateModal').classList.add('open');
+}
+
+function closeNewCandidateModal() {
+  document.getElementById('newCandidateModal').classList.remove('open');
+}
+
+function confirmReset() {
+  saveCurrentCandidate();   // ← auto-save before clearing
+  closeNewCandidateModal();
+
+  // Clear candidate name
+  document.getElementById('candidateName').value = '';
+
+  // Reset all timers
+  [1,2,3].forEach(n => resetTimer(n));
+
+  // Reset scores
+  scores[1] = null; scores[2] = null; scores[3] = null;
+  document.querySelectorAll('.sc-btn').forEach(b => {
+    b.className = b.className.replace(/sel-\d/g, '').trim();
+  });
+  document.getElementById('rubric-1').textContent = '';
+  document.getElementById('rubric-2').textContent = '';
+  document.getElementById('rubric-3').textContent = '';
+
+  // Reset score display
+  document.getElementById('total-score-display').textContent = '—';
+  document.getElementById('decision-badge').textContent = 'Score all sections';
+  document.getElementById('decision-badge').className = 'decision-badge d-pending';
+  document.getElementById('decision-sub').innerHTML = '3.5–4.0 = Strong Hire<br>2.8–3.4 = Hire<br>2.0–2.7 = Borderline<br>&lt;2.0 = No Hire';
+  document.getElementById('critical-flag-mini').style.display = 'none';
+
+  // Clear notes
+  document.querySelector('.notes-card textarea').value = '';
+
+  // Reset final score panel
+  [1,2,3].forEach(s => {
+    document.getElementById('fs-s'+s).textContent = '—';
+    document.getElementById('fs-w'+s).textContent = '—';
+  });
+  document.getElementById('fs-total').textContent = '—';
+  document.getElementById('fs-big-score').textContent = '—';
+  document.getElementById('fs-decision-badge').textContent = 'Score sections →';
+  document.getElementById('fs-decision-badge').className = 'decision-badge d-pending';
+  document.getElementById('fs-decision-sub').textContent = 'Fill in scores on the right panel';
+  document.getElementById('fs-critical-flag').style.display = 'none';
+  if (document.getElementById('final-notes')) document.getElementById('final-notes').value = '';
+
+  // Reset error counter
+  document.querySelectorAll('.error-count-btn').forEach(b => b.classList.remove('active'));
+
+  // Re-lock answer keys
+  [1,2].forEach(n => {
+    const locked = document.getElementById('ak-locked-'+n);
+    const content = document.getElementById('ak-content-'+n);
+    if (locked) locked.style.display = 'block';
+    if (content) content.classList.remove('revealed');
+  });
+
+  // Reset nav badges
+  [1,2,3].forEach(n => {
+    document.getElementById('nav-'+n).classList.remove('done');
+    document.getElementById('circle-'+n).textContent = n;
+  });
+
+  // Go to section 1
+  goSection(1);
+
+  showToast('✓ Ready for next candidate!');
+}
+
+// Close modal on backdrop click
+document.getElementById('newCandidateModal').addEventListener('click', function(e) {
+  if (e.target === this) closeNewCandidateModal();
+});
+
+// ═══════════════════════════════════════════════
+//  CANDIDATE HISTORY  (localStorage)
+// ═══════════════════════════════════════════════
+let candidateHistory = JSON.parse(localStorage.getItem('recessCandidateHistory') || '[]');
+
+function getDecisionKey(weightedScore, closeScore) {
+  if (weightedScore === null) return 'incomplete';
+  if (closeScore === 1) return 'no-hire';
+  if (weightedScore >= 3.5) return 'strong-hire';
+  if (weightedScore >= 2.8) return 'hire';
+  if (weightedScore >= 2.0) return 'borderline';
+  return 'no-hire';
+}
+
+function getDecisionLabel(key) {
+  return { 'strong-hire':'⭐ Strong Hire', 'hire':'✅ Hire',
+           'borderline':'⚠️ Borderline', 'no-hire':'🚫 No Hire',
+           'incomplete':'— Incomplete' }[key] || '—';
+}
+
+function saveCurrentCandidate() {
+  const name = document.getElementById('candidateName').value.trim() || 'Unnamed Candidate';
+  const allScored = scores[1] !== null && scores[2] !== null && scores[3] !== null;
+  let weightedScore = null;
+  if (allScored) {
+    weightedScore = parseFloat(((scores[1]*0.20 + scores[2]*0.30 + scores[3]*0.15) / 0.65).toFixed(2));
+  }
+  const notes = document.querySelector('.notes-card textarea').value.trim();
+  const record = {
+    id: Date.now(),
+    name,
+    timestamp: new Date().toISOString(),
+    scores: { 1: scores[1], 2: scores[2], 3: scores[3] },
+    weightedScore,
+    decision: getDecisionKey(weightedScore, scores[2]),
+    notes
+  };
+  candidateHistory.unshift(record);
+  localStorage.setItem('recessCandidateHistory', JSON.stringify(candidateHistory));
+  updateCandidateBadge();
+}
+
+function updateCandidateBadge() {
+  const badge = document.getElementById('cand-count-badge');
+  if (candidateHistory.length > 0) badge.textContent = '(' + candidateHistory.length + ')';
+  else badge.textContent = '';
+}
+
+function scoreClass(s) {
+  if (!s) return 'sp-none';
+  return 'sp-' + s;
+}
+function weightedClass(d) {
+  return { 'strong-hire':'ws-strong', 'hire':'ws-hire', 'borderline':'ws-border',
+           'no-hire':'ws-nohire', 'incomplete':'ws-none' }[d] || 'ws-none';
+}
+function decisionClass(d) {
+  return { 'strong-hire':'cb-strong', 'hire':'cb-hire', 'borderline':'cb-border',
+           'no-hire':'cb-nohire', 'incomplete':'cb-incomplete' }[d] || 'cb-incomplete';
+}
+
+function renderCandidateHistory() {
+  const container = document.getElementById('candidates-list');
+  const statsEl   = document.getElementById('cand-stats');
+
+  if (candidateHistory.length === 0) {
+    statsEl.style.display = 'none';
+    container.innerHTML = `
+      <div class="candidates-empty">
+        <span class="empty-icon">📋</span>
+        No candidates recorded yet.<br>
+        Scores are saved automatically when you click<br>
+        <strong>"Reset for Next Candidate"</strong>.
+      </div>`;
+    return;
+  }
+
+  // Compute stats
+  const scored = candidateHistory.filter(c => c.weightedScore !== null);
+  const avgScore = scored.length ? (scored.reduce((a,c) => a + c.weightedScore, 0) / scored.length).toFixed(2) : '—';
+  const bestScore = scored.length ? Math.max(...scored.map(c => c.weightedScore)).toFixed(2) : '—';
+  const bestId   = scored.length ? scored.reduce((a,c) => c.weightedScore > a.weightedScore ? c : a).id : null;
+  const hireCount = candidateHistory.filter(c => c.decision === 'hire' || c.decision === 'strong-hire').length;
+
+  statsEl.style.display = 'flex';
+  document.getElementById('cstat-count').textContent = candidateHistory.length;
+  document.getElementById('cstat-avg').textContent   = avgScore;
+  document.getElementById('cstat-best').textContent  = bestScore;
+  document.getElementById('cstat-hire').textContent  = hireCount;
+
+  // Build table
+  const rows = candidateHistory.map((c, i) => {
+    const isBest = c.id === bestId;
+    const date   = new Date(c.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    const time   = new Date(c.timestamp).toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    const ws     = c.weightedScore !== null ? c.weightedScore.toFixed(2) : '—';
+    const hasNotes = c.notes && c.notes.length > 0;
+
+    const scoreCell = (s) => s !== null
+      ? `<td class="col-score"><span class="score-pill ${scoreClass(s)}">${s}</span></td>`
+      : `<td class="col-score"><span class="score-pill sp-none">—</span></td>`;
+
+    return `
+      <tr class="${isBest ? 'best-overall' : ''}" id="row-${c.id}">
+        <td>
+          <div class="cand-name">${escHtml(c.name)} ${isBest ? '<span class="top-badge">TOP</span>' : ''}</div>
+          <div class="cand-date">${date} · ${time}</div>
+        </td>
+        ${scoreCell(c.scores[1])}
+        ${scoreCell(c.scores[2])}
+        ${scoreCell(c.scores[3])}
+        <td class="col-score">
+          <span class="weighted-score ${weightedClass(c.decision)}">${ws}</span>
+        </td>
+        <td>
+          <span class="cand-decision-badge ${decisionClass(c.decision)}">${getDecisionLabel(c.decision)}</span>
+        </td>
+        <td>
+          ${hasNotes
+            ? `<button class="cand-notes-toggle" onclick="toggleNotes(${c.id})">Notes ▾</button>`
+            : `<span style="font-size:11px;color:var(--muted)">—</span>`}
+        </td>
+        <td>
+          <button class="cand-delete" onclick="deleteCandidate(${c.id})" title="Remove">✕</button>
+        </td>
+      </tr>
+      ${hasNotes ? `
+      <tr class="notes-row" id="notes-${c.id}">
+        <td colspan="8">
+          <div class="notes-row-inner" id="notes-inner-${c.id}">${escHtml(c.notes).replace(/\n/g,'<br>')}</div>
+        </td>
+      </tr>` : ''}`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="candidates-table-wrap">
+      <table class="candidates-table">
+        <thead>
+          <tr>
+            <th>Candidate</th>
+            <th class="col-score">Inbox<br><span style="font-weight:400;color:var(--muted)">20%</span></th>
+            <th class="col-score">Close Pkg<br><span style="font-weight:400;color:var(--muted)">30%</span></th>
+            <th class="col-score">AI<br><span style="font-weight:400;color:var(--muted)">15%</span></th>
+            <th class="col-score">Weighted<br><span style="font-weight:400;color:var(--muted)">Score</span></th>
+            <th>Decision</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function toggleNotes(id) {
+  const inner = document.getElementById('notes-inner-' + id);
+  const btn = document.querySelector(`#row-${id} .cand-notes-toggle`);
+  if (!inner) return;
+  const open = inner.classList.toggle('open');
+  if (btn) btn.textContent = open ? 'Notes ▴' : 'Notes ▾';
+}
+
+function deleteCandidate(id) {
+  candidateHistory = candidateHistory.filter(c => c.id !== id);
+  localStorage.setItem('recessCandidateHistory', JSON.stringify(candidateHistory));
+  updateCandidateBadge();
+  renderCandidateHistory();
+}
+
+function clearAllCandidates() {
+  if (!candidateHistory.length) return;
+  if (confirm('Clear all ' + candidateHistory.length + ' candidate records? This cannot be undone.')) {
+    candidateHistory = [];
+    localStorage.removeItem('recessCandidateHistory');
+    updateCandidateBadge();
+    renderCandidateHistory();
+  }
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════
+//  INIT — open script accordions
+// ═══════════════════════════════════════════════
+window.onload = () => {
+  // Make chevrons match initial open state
+  ['script-1','script-2','script-3','dq-3','tb-2'].forEach(id => {
+    const chev = document.getElementById('chev-'+id);
+    if (chev) chev.classList.add('open');
+  });
+  // Load persisted candidate count into badge
+  updateCandidateBadge();
+};
+</script>
+</body>
+</html>
